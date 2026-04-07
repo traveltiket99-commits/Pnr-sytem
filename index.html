@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Boarding Pass</title>
+<title>Golden Travel Rama</title>
 
 <script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
 
@@ -15,11 +15,12 @@ body {
 }
 
 .header {
-  background: #1e4fa3;
-  color: white;
+  background: #000;
+  color: gold;
   text-align: center;
   padding: 15px;
   font-weight: bold;
+  letter-spacing: 1px;
 }
 
 .card {
@@ -40,9 +41,10 @@ input {
 button {
   width: 100%;
   padding: 12px;
-  background: #2d6cdf;
-  color: white;
+  background: gold;
+  color: black;
   border: none;
+  font-weight: bold;
 }
 
 /* BOARDING PASS */
@@ -50,15 +52,16 @@ button {
   margin-top: 20px;
   border-radius: 15px;
   overflow: hidden;
-  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 20px rgba(0,0,0,0.2);
 }
 
 .top {
-  background: linear-gradient(90deg,#ff6a00,#ff8c00);
-  color: white;
+  background: linear-gradient(90deg,#b8860b,#ffd700);
+  color: black;
   padding: 15px;
   display: flex;
   justify-content: space-between;
+  font-weight: bold;
 }
 
 .middle {
@@ -69,7 +72,7 @@ button {
 .route {
   display: flex;
   justify-content: space-between;
-  font-size: 20px;
+  font-size: 22px;
   font-weight: bold;
   margin: 10px 0;
 }
@@ -90,12 +93,18 @@ button {
   margin-top: 10px;
   text-align: center;
 }
+
+.brand {
+  font-size: 14px;
+  margin-top: 5px;
+  color: #555;
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ CEK BOOKING</div>
+<div class="header">✈️ GOLDEN TRAVEL RAMA</div>
 
 <div class="card">
   <h3>Cek Kode PNR</h3>
@@ -151,6 +160,8 @@ function cekPNR() {
             <div>${data.seat}</div>
           </div>
 
+          <div class="brand">Golden Travel Rama</div>
+
           <div class="qr">
             <canvas id="qrcode"></canvas>
           </div>
@@ -163,7 +174,6 @@ function cekPNR() {
       </div>
     `;
 
-    // Generate QR Code
     QRCode.toCanvas(document.getElementById('qrcode'), 
       `${pnr} | ${data.name} | ${data.flight}`, 
       function (error) {
