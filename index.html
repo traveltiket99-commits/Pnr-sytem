@@ -66,10 +66,6 @@ button {
     cursor: pointer;
 }
 
-button:hover {
-    background: #ff0000;
-}
-
 /* RESULT */
 .result {
     margin-top: 20px;
@@ -133,30 +129,19 @@ button:hover {
 /* DATABASE TIKET */
 const data = {
 
-"ABC123": {
-nama: "Budi Santoso",
+/* DATA LION AIR (TIKET GAMBAR) */
+"JQKLZA": {
+nama: "ARTHUR CHRISTIAN",
 maskapai: "Lion Air",
-flight: "JT-610",
-dari: "CGK (Jakarta)",
-ke: "DPS (Bali)",
-jam: "08:30",
-tanggal: "01 Jan 2026",
-durasi: "1j 50m",
-seat: "12A",
+flight: "JT-215",
+dari: "KNO (Medan)",
+ke: "CGK (Jakarta)",
+jam: "18:30 - 20:50",
+tanggal: "08 April 2026",
+durasi: "2j 20m",
+bagasi: "20kg",
+kelas: "Ekonomi",
 status: "Confirmed"
-},
-
-"XYZ789": {
-nama: "Andi Saputra",
-maskapai: "Garuda Indonesia",
-flight: "GA-200",
-dari: "CGK (Jakarta)",
-ke: "SUB (Surabaya)",
-jam: "13:45",
-tanggal: "02 Jan 2026",
-durasi: "1j 20m",
-seat: "7B",
-status: "Menunggu Pembayaran"
 },
 
 /* DATA KAMU */
@@ -199,15 +184,21 @@ h.innerHTML = `
 <div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
 
 <div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>
+<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
 
 <div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
 <div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
 
 <div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
 <div><div class="label">Durasi</div><div class="value">${d.durasi}</div></div>
+</div>
 
-<div><div class="label">Tanggal</div><div class="value">${d.tanggal}</div></div>
+<br>
+
+<div class="grid">
+${d.seat ? `<div><div class="label">Seat</div><div class="value">${d.seat}</div></div>` : ""}
+${d.bagasi ? `<div><div class="label">Bagasi</div><div class="value">${d.bagasi}</div></div>` : ""}
+${d.kelas ? `<div><div class="label">Kelas</div><div class="value">${d.kelas}</div></div>` : ""}
 </div>
 
 <br>
