@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>E-Tiket Generator</title>
+
+<!-- Library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+<style>
+body{
+    font-family: Arial;
+    background:#f2f2f2;
+    text-align:center;
+}
+
+.box{
+    background:white;
+    padding:20px;
+    margin:20px auto;
+    width:320px;
+    border-radius:10px;
+}
+
+input{
+    width:100%;
+    padding:8px;
+    margin:5px 0;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    background:gold;
+    border:none;
+    margin-top:10px;
+    font-weight:bold;
+    border-radius:5px;
+}
+
+/* TIKET */
+.ticket{
+    width:350px;
+    margin:20px auto;
+    background:white;
+    border-radius:10px;
+    overflow:hidden;
+    text-align:left;
+}
+
+.header{
+    background:red;
+    color:white;
+    padding:10px;
+    font-weight:bold;
+}
+
+.content{
+    padding:15px;
+}
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    margin:5px 0;
+}
+
+.qr{
+    text-align:center;
+    margin-top:10px;
+}
+
+.status{
+    background:gold;
+    padding:5px;
+    display:inline-block;
+    margin-top:10px;
+}
+</style>
+</head>
+
+<body>
+
+<h2>BUAT E-TIKET</h2>
+
+<div class="box">
+<input id="nama" placeholder="Nama">
+<input id="pnr" placeholder="PNR">
+<input id="maskapai" placeholder="Maskapai">
+<input id="flight" placeholder="Flight">
+<input id="from" placeholder="Dari">
+<input id="to" placeholder="Tujuan">
+<input id="tanggal" placeholder="Tanggal">
+<input id="seat" placeholder="Seat">
+
+<button onclick="buat()">Buat Tiket</button>
+</div>
+
+<div id="hasil"></div>
+
+<button onclick="download()">Download PDF</button>
+
+<script>
+
+function buat(){
+
+let nama = namaEl.value;
+let pnr = pnrEl.value;
+let maskapai = maskapaiEl.value;
+let flight = flightEl.value;
+let from = fromEl.value;
+let to = toEl.value;
+let tanggal = tanggalEl.value;
+let seat = seatEl.value;
+
+document.getElementById("hasil").innerHTML = `
+<div class="ticket" id="tiket">
+<div class="header">${maskapai}</div>
+
+<div class="content">
+<h3>${nama}</h3>
+<p>PNR: ${pnr}</p>
+
+<div class="row">
+<span>${from}</span>
+<span>→</span>
+<span>${to}</span>
+</div>
+
+<p>Tanggal: ${tanggal}</p>
+<p>Seat: ${seat}</p>
+<p>Flight: ${flight}</p>
+
+<div class="status">Menunggu Pembayaran</div>
+
+<div class="qr">
+<div id="qrcode"></div>
+</div>
+
+</div>
+</div>
+`;
+
+new QRCode(document.getElementById("qrcode"), {
+    text: pnr,
+    width: 100,
+    height: 100
+});
+}
+
+function download(){
+    const element = document.getElementById("tiket");
+
+    html2pdf().from(element).save("e-ticket.pdf");
+}
+
+/* shortcut variable */
+const namaEl = document.getElementById("nama");
+const pnrEl = document.getElementById("pnr");
+const maskapaiEl = document.getElementById("maskapai");
+const flightEl = document.getElementById("flight");
+const fromEl = document.getElementById("from");
+const toEl = document.getElementById("to");
+const tanggalEl = document.getElementById("tanggal");
+const seatEl = document.getElementById("seat");
+
+</script>
+
+</body>
+</html>
