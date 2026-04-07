@@ -8,160 +8,123 @@
 <style>
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: Arial;
   background: #f2f4f7;
 }
 
-/* HEADER */
 .header {
   background: #1e4fa3;
   color: white;
   padding: 15px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  text-align: center;
+  font-weight: bold;
 }
 
-.header h1 {
-  font-size: 18px;
-  margin: 0;
-}
-
-/* CARD */
 .card {
   background: white;
-  margin: 20px;
+  margin: 15px;
   padding: 20px;
   border-radius: 12px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
 }
 
-/* TITLE */
-.title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #1e4fa3;
-}
-
-.subtitle {
-  color: #555;
-  margin-bottom: 15px;
-}
-
-/* INPUT */
-.input-group {
-  display: flex;
-}
-
-.input-group input {
-  flex: 1;
+input {
+  width: 100%;
   padding: 12px;
-  border-radius: 8px 0 0 8px;
-  border: 1px solid #ccc;
-  font-size: 16px;
+  margin: 10px 0;
 }
 
-.input-group button {
+button {
+  width: 100%;
+  padding: 12px;
   background: #2d6cdf;
   color: white;
   border: none;
-  padding: 12px 20px;
-  border-radius: 0 8px 8px 0;
-  cursor: pointer;
-  font-size: 16px;
 }
 
-/* CAPTCHA STYLE */
-.captcha {
+/* RESULT STYLE */
+.ticket {
   margin-top: 15px;
-  padding: 12px;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.captcha input {
-  width: 18px;
-  height: 18px;
-}
-
-/* RESULT */
-.result {
-  margin-top: 15px;
-  padding: 10px;
   background: #eef3ff;
-  border-radius: 8px;
+  padding: 15px;
+  border-radius: 10px;
 }
 
-/* FOOTER */
-.footer {
-  text-align: center;
-  margin-top: 30px;
-  color: #777;
-  font-size: 14px;
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin: 5px 0;
+}
+
+.label {
+  color: #555;
+}
+
+.value {
+  font-weight: bold;
 }
 </style>
-
 </head>
+
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <h1>✈️ Airline</h1>
-  <div>☰</div>
-</div>
+<div class="header">✈️ CEK BOOKING</div>
 
-<!-- CONTENT -->
 <div class="card">
-  <div class="title">Cek Kode PNR</div>
-  <div class="subtitle">Masukkan kode booking Anda</div>
+  <h3>Cek Kode PNR</h3>
 
-  <div class="input-group">
-    <input type="text" id="pnr" placeholder="Kode PNR">
-    <button onclick="cekPNR()">Cek</button>
-  </div>
+  <input id="pnr" placeholder="Masukkan Kode PNR">
+  <button onclick="cekPNR()">Cek Booking</button>
 
-  <div class="captcha">
-    <input type="checkbox" id="robot">
-    <label>Saya bukan robot</label>
-  </div>
-
-  <div class="result" id="result"></div>
-</div>
-
-<div class="footer">
-  © 2026 Airline System
+  <div id="result"></div>
 </div>
 
 <script>
+
+// DATA PENUMPANG (STATIC - seperti database maskapai)
+const dataPNR = {
+  "ABC123": {
+    name: "Budi Santoso",
+    flight: "JT-610",
+    from: "Jakarta",
+    to: "Surabaya",
+    date: "10 April 2026",
+    seat: "12A",
+    status: "Confirmed"
+  },
+  "XYZ789": {
+    name: "Siti Aminah",
+    flight: "GA-205",
+    from: "Jakarta",
+    to: "Bali",
+    date: "12 April 2026",
+    seat: "7C",
+    status: "Confirmed"
+  }
+};
+
+// CEK PNR
 function cekPNR() {
-  const pnr = document.getElementById("pnr").value;
-  const robot = document.getElementById("robot").checked;
+  const pnr = document.getElementById("pnr").value.toUpperCase();
+  const data = dataPNR[pnr];
 
-  if (!pnr) {
-    alert("Masukkan kode PNR");
-    return;
-  }
-
-  if (!robot) {
-    alert("Centang 'Saya bukan robot'");
-    return;
-  }
-
-  // simulasi data
-  const data = JSON.parse(localStorage.getItem("pnrData")) || {};
-
-  if (data[pnr]) {
-    document.getElementById("result").innerHTML =
-      "<b>Nama:</b> " + data[pnr].name +
-      "<br><b>Penerbangan:</b> " + data[pnr].flight;
+  if (data) {
+    document.getElementById("result").innerHTML = `
+      <div class="ticket">
+        <div class="row"><span class="label">Nama</span><span class="value">${data.name}</span></div>
+        <div class="row"><span class="label">PNR</span><span class="value">${pnr}</span></div>
+        <div class="row"><span class="label">Flight</span><span class="value">${data.flight}</span></div>
+        <div class="row"><span class="label">Rute</span><span class="value">${data.from} → ${data.to}</span></div>
+        <div class="row"><span class="label">Tanggal</span><span class="value">${data.date}</span></div>
+        <div class="row"><span class="label">Seat</span><span class="value">${data.seat}</span></div>
+        <div class="row"><span class="label">Status</span><span class="value">${data.status}</span></div>
+      </div>
+    `;
   } else {
     document.getElementById("result").innerHTML =
-      "PNR tidak ditemukan";
+      "<div class='ticket'>PNR tidak ditemukan</div>";
   }
 }
+
 </script>
 
 </body>
