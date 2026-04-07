@@ -14,15 +14,17 @@ body {
   background: #f2f4f7;
 }
 
+/* HEADER */
 .header {
-  background: #000;
+  background: black;
   color: gold;
   text-align: center;
   padding: 15px;
   font-weight: bold;
-  letter-spacing: 1px;
+  font-size: 18px;
 }
 
+/* CARD */
 .card {
   background: white;
   margin: 15px;
@@ -30,6 +32,7 @@ body {
   border-radius: 12px;
 }
 
+/* INPUT */
 input {
   width: 100%;
   padding: 12px;
@@ -38,6 +41,7 @@ input {
   text-transform: uppercase;
 }
 
+/* BUTTON */
 button {
   width: 100%;
   padding: 12px;
@@ -95,8 +99,9 @@ button {
 }
 
 .brand {
+  text-align: center;
+  margin-top: 10px;
   font-size: 14px;
-  margin-top: 5px;
   color: #555;
 }
 </style>
@@ -116,6 +121,7 @@ button {
 
 <script>
 
+// DATA PENUMPANG
 const dataPNR = {
   "ABC123": {
     name: "Budi Santoso",
@@ -128,6 +134,7 @@ const dataPNR = {
   }
 };
 
+// FUNCTION CEK
 function cekPNR() {
   const pnr = document.getElementById("pnr").value.toUpperCase().trim();
   const data = dataPNR[pnr];
@@ -155,6 +162,7 @@ function cekPNR() {
             <div>Tanggal</div>
             <div>${data.date}</div>
           </div>
+
           <div class="row">
             <div>Seat</div>
             <div>${data.seat}</div>
@@ -174,6 +182,7 @@ function cekPNR() {
       </div>
     `;
 
+    // QR CODE
     QRCode.toCanvas(document.getElementById('qrcode'), 
       `${pnr} | ${data.name} | ${data.flight}`, 
       function (error) {
