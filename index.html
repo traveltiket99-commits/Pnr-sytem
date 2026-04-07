@@ -1,1 +1,64 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>PNR System</title>
+  <style>
+    body { font-family: Arial; background:#f4f4f4; padding:20px }
+    .container { max-width:600px; margin:auto; background:white; padding:20px; border-radius:10px }
+    input, button { width:100%; padding:10px; margin:5px 0 }
+    button { background:#007bff; color:white; border:none; cursor:pointer }
+    .result { margin-top:10px; padding:10px; background:#eee }
+  </style>
+</head>
+<body>
 
+<div class="container">
+  <h2>Input Data PNR</h2>
+  <input type="text" id="pnr" placeholder="Kode PNR">
+  <input type="text" id="name" placeholder="Nama">
+  <input type="text" id="flight" placeholder="Penerbangan">
+  <button onclick="savePNR()">Simpan</button>
+
+  <h2>Cek PNR</h2>
+  <input type="text" id="searchPNR" placeholder="Masukkan Kode PNR">
+  <button onclick="checkPNR()">Cek</button>
+
+  <div class="result" id="result"></div>
+</div>
+
+<script>
+  function savePNR() {
+    const pnr = document.getElementById('pnr').value;
+    const name = document.getElementById('name').value;
+    const flight = document.getElementById('flight').value;
+
+    if (!pnr || !name || !flight) {
+      alert('Semua field wajib diisi');
+      return;
+    }
+
+    const data = JSON.parse(localStorage.getItem('pnrData')) || {};
+    data[pnr] = { name, flight };
+    localStorage.setItem('pnrData', JSON.stringify(data));
+
+    alert('Data berhasil disimpan');
+  }
+
+  function checkPNR() {
+    const search = document.getElementById('searchPNR').value;
+    const data = JSON.parse(localStorage.getItem('pnrData')) || {};
+
+    if (data[search]) {
+      document.getElementById('result').innerHTML = `
+        Nama: ${data[search].name}<br>
+        Penerbangan: ${data[search].flight}
+      `;
+    } else {
+      document.getElementById('result').innerHTML = 'PNR tidak ditemukan';
+    }
+  }
+</script>
+
+</body>
+</html>
