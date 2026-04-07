@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Boarding Pass</title>
 
+<script src="https://cdn.jsdelivr.net/npm/qrcode/build/qrcode.min.js"></script>
+
 <style>
 body {
   margin: 0;
@@ -69,10 +71,7 @@ button {
   justify-content: space-between;
   font-size: 20px;
   font-weight: bold;
-}
-
-.info {
-  margin-top: 10px;
+  margin: 10px 0;
 }
 
 .row {
@@ -85,8 +84,11 @@ button {
   background: #eee;
   padding: 10px;
   text-align: center;
-  letter-spacing: 2px;
-  font-size: 18px;
+}
+
+.qr {
+  margin-top: 10px;
+  text-align: center;
 }
 </style>
 </head>
@@ -140,15 +142,17 @@ function cekPNR() {
             <div>${data.to}</div>
           </div>
 
-          <div class="info">
-            <div class="row">
-              <div>Tanggal</div>
-              <div>${data.date}</div>
-            </div>
-            <div class="row">
-              <div>Seat</div>
-              <div>${data.seat}</div>
-            </div>
+          <div class="row">
+            <div>Tanggal</div>
+            <div>${data.date}</div>
+          </div>
+          <div class="row">
+            <div>Seat</div>
+            <div>${data.seat}</div>
+          </div>
+
+          <div class="qr">
+            <canvas id="qrcode"></canvas>
           </div>
         </div>
 
@@ -158,6 +162,15 @@ function cekPNR() {
 
       </div>
     `;
+
+    // Generate QR Code
+    QRCode.toCanvas(document.getElementById('qrcode'), 
+      `${pnr} | ${data.name} | ${data.flight}`, 
+      function (error) {
+        if (error) console.error(error);
+      }
+    );
+
   } else {
     document.getElementById("result").innerHTML =
       "<div class='ticket'>PNR tidak ditemukan</div>";
