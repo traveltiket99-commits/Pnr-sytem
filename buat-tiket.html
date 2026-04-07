@@ -1,1 +1,176 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Buat E-Tiket</title>
 
+<!-- html2canvas -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<style>
+body {
+  font-family: Arial;
+  background: #f2f4f7;
+  margin: 0;
+}
+
+/* HEADER */
+.header {
+  background: black;
+  color: gold;
+  text-align: center;
+  padding: 15px;
+  font-weight: bold;
+}
+
+/* CARD INPUT */
+.card {
+  background: white;
+  margin: 20px;
+  padding: 20px;
+  border-radius: 12px;
+}
+
+/* INPUT */
+input {
+  width: 100%;
+  padding: 12px;
+  margin: 8px 0;
+}
+
+/* BUTTON */
+button {
+  width: 100%;
+  padding: 12px;
+  background: gold;
+  border: none;
+  font-weight: bold;
+  margin-top: 10px;
+}
+
+/* TIKET */
+.ticket {
+  margin: 20px;
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  display: none;
+}
+
+.ticket-header {
+  background: linear-gradient(to right, black, gold);
+  color: white;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.ticket-body {
+  padding: 15px;
+}
+
+.route {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 10px 0;
+}
+
+.qr {
+  text-align: center;
+  margin-top: 15px;
+}
+
+.download {
+  margin: 20px;
+}
+</style>
+
+</head>
+<body>
+
+<div class="header">✈️ CEK KODE PNR SEMUA MASKAPAI</div>
+
+<div class="card">
+<h3>Input Data Tiket</h3>
+
+<input id="nama" placeholder="Nama">
+<input id="pnr" placeholder="PNR">
+<input id="flight" placeholder="Flight">
+<input id="rute" placeholder="Jakarta - Bali">
+<input id="tanggal" placeholder="Tanggal">
+<input id="seat" placeholder="Seat">
+<input id="maskapai" placeholder="Maskapai">
+
+<button onclick="buat()">Buat Tiket</button>
+</div>
+
+<!-- TIKET -->
+<div id="tiket" class="ticket">
+
+<div class="ticket-header">
+<div id="flightH"></div>
+<div>MENUNGGU PEMBAYARAN</div>
+</div>
+
+<div class="ticket-body">
+<b id="namaH"></b><br>
+PNR: <span id="pnrH"></span><br><br>
+
+<div class="route" id="ruteH"></div>
+
+Tanggal: <span id="tanggalH"></span><br>
+Seat: <span id="seatH"></span><br><br>
+
+<div id="maskapaiH"></div>
+
+<div class="qr">
+<img id="qrImg" width="120">
+</div>
+
+</div>
+
+</div>
+
+<div class="download">
+<button onclick="download()">Download E-Tiket</button>
+</div>
+
+<script>
+function buat() {
+  const nama = document.getElementById("nama").value;
+  const pnr = document.getElementById("pnr").value;
+  const flight = document.getElementById("flight").value;
+  const rute = document.getElementById("rute").value;
+  const tanggal = document.getElementById("tanggal").value;
+  const seat = document.getElementById("seat").value;
+  const maskapai = document.getElementById("maskapai").value;
+
+  document.getElementById("tiket").style.display = "block";
+
+  document.getElementById("namaH").innerText = nama;
+  document.getElementById("pnrH").innerText = pnr;
+  document.getElementById("flightH").innerText = flight;
+  document.getElementById("ruteH").innerText = rute.replace("-", "→");
+  document.getElementById("tanggalH").innerText = tanggal;
+  document.getElementById("seatH").innerText = seat;
+  document.getElementById("maskapaiH").innerText = maskapai;
+
+  // QR otomatis
+  document.getElementById("qrImg").src =
+    "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + pnr;
+}
+
+// DOWNLOAD
+function download() {
+  html2canvas(document.getElementById("tiket")).then(canvas => {
+    const link = document.createElement("a");
+    link.download = "e-tiket.png";
+    link.href = canvas.toDataURL();
+    link.click();
+  });
+}
+</script>
+
+</body>
+</html>
