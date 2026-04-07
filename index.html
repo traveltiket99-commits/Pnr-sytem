@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Cek PNR</title>
+<title>Boarding Pass</title>
 
 <style>
 body {
@@ -15,8 +15,8 @@ body {
 .header {
   background: #1e4fa3;
   color: white;
-  padding: 15px;
   text-align: center;
+  padding: 15px;
   font-weight: bold;
 }
 
@@ -30,7 +30,7 @@ body {
 input {
   width: 100%;
   padding: 12px;
-  margin: 10px 0;
+  margin-bottom: 10px;
   font-size: 16px;
   text-transform: uppercase;
 }
@@ -43,11 +43,36 @@ button {
   border: none;
 }
 
+/* BOARDING PASS */
 .ticket {
-  margin-top: 15px;
-  background: #eef3ff;
+  margin-top: 20px;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+}
+
+.top {
+  background: linear-gradient(90deg,#ff6a00,#ff8c00);
+  color: white;
   padding: 15px;
-  border-radius: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.middle {
+  padding: 15px;
+  background: #fff;
+}
+
+.route {
+  display: flex;
+  justify-content: space-between;
+  font-size: 20px;
+  font-weight: bold;
+}
+
+.info {
+  margin-top: 10px;
 }
 
 .row {
@@ -56,12 +81,12 @@ button {
   margin: 5px 0;
 }
 
-.label {
-  color: #555;
-}
-
-.value {
-  font-weight: bold;
+.bottom {
+  background: #eee;
+  padding: 10px;
+  text-align: center;
+  letter-spacing: 2px;
+  font-size: 18px;
 }
 </style>
 </head>
@@ -72,7 +97,6 @@ button {
 
 <div class="card">
   <h3>Cek Kode PNR</h3>
-
   <input id="pnr" placeholder="Masukkan Kode PNR">
   <button onclick="cekPNR()">Cek Booking</button>
 
@@ -81,7 +105,6 @@ button {
 
 <script>
 
-// DATA PENUMPANG (SUDAH FIX)
 const dataPNR = {
   "ABC123": {
     name: "Budi Santoso",
@@ -90,29 +113,10 @@ const dataPNR = {
     to: "Surabaya",
     date: "10 April 2026",
     seat: "12A",
-    status: "Confirmed"
-  },
-  "XYZ789": {
-    name: "Siti Aminah",
-    flight: "GA-205",
-    from: "Jakarta",
-    to: "Bali",
-    date: "12 April 2026",
-    seat: "7C",
-    status: "Confirmed"
-  },
-  "QWE456": {
-    name: "Andi Wijaya",
-    flight: "ID-123",
-    from: "Medan",
-    to: "Jakarta",
-    date: "15 April 2026",
-    seat: "14B",
-    status: "Confirmed"
+    status: "CONFIRMED"
   }
 };
 
-// FUNCTION CEK (SUDAH FIX)
 function cekPNR() {
   const pnr = document.getElementById("pnr").value.toUpperCase().trim();
   const data = dataPNR[pnr];
@@ -120,13 +124,38 @@ function cekPNR() {
   if (data) {
     document.getElementById("result").innerHTML = `
       <div class="ticket">
-        <div class="row"><span class="label">Nama</span><span class="value">${data.name}</span></div>
-        <div class="row"><span class="label">PNR</span><span class="value">${pnr}</span></div>
-        <div class="row"><span class="label">Flight</span><span class="value">${data.flight}</span></div>
-        <div class="row"><span class="label">Rute</span><span class="value">${data.from} → ${data.to}</span></div>
-        <div class="row"><span class="label">Tanggal</span><span class="value">${data.date}</span></div>
-        <div class="row"><span class="label">Seat</span><span class="value">${data.seat}</span></div>
-        <div class="row"><span class="label">Status</span><span class="value">${data.status}</span></div>
+
+        <div class="top">
+          <div>${data.flight}</div>
+          <div>${data.status}</div>
+        </div>
+
+        <div class="middle">
+          <b>${data.name}</b><br>
+          PNR: ${pnr}
+
+          <div class="route">
+            <div>${data.from}</div>
+            <div>→</div>
+            <div>${data.to}</div>
+          </div>
+
+          <div class="info">
+            <div class="row">
+              <div>Tanggal</div>
+              <div>${data.date}</div>
+            </div>
+            <div class="row">
+              <div>Seat</div>
+              <div>${data.seat}</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="bottom">
+          |||||||||||||||||||||||||||||||
+        </div>
+
       </div>
     `;
   } else {
