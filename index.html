@@ -31,6 +31,8 @@ input {
   width: 100%;
   padding: 12px;
   margin: 10px 0;
+  font-size: 16px;
+  text-transform: uppercase;
 }
 
 button {
@@ -41,7 +43,6 @@ button {
   border: none;
 }
 
-/* RESULT STYLE */
 .ticket {
   margin-top: 15px;
   background: #eef3ff;
@@ -80,7 +81,7 @@ button {
 
 <script>
 
-// DATA PENUMPANG (STATIC - seperti database maskapai)
+// DATA PENUMPANG (SUDAH FIX)
 const dataPNR = {
   "ABC123": {
     name: "Budi Santoso",
@@ -99,12 +100,21 @@ const dataPNR = {
     date: "12 April 2026",
     seat: "7C",
     status: "Confirmed"
+  },
+  "QWE456": {
+    name: "Andi Wijaya",
+    flight: "ID-123",
+    from: "Medan",
+    to: "Jakarta",
+    date: "15 April 2026",
+    seat: "14B",
+    status: "Confirmed"
   }
 };
 
-// CEK PNR
+// FUNCTION CEK (SUDAH FIX)
 function cekPNR() {
-  const pnr = document.getElementById("pnr").value.toUpperCase();
+  const pnr = document.getElementById("pnr").value.toUpperCase().trim();
   const data = dataPNR[pnr];
 
   if (data) {
