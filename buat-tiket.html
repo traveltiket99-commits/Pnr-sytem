@@ -3,169 +3,161 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Buat E-Tiket</title>
+<title>E-Tiket</title>
 
-<!-- html2canvas -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 
 <style>
 body {
   font-family: Arial;
-  background: #f2f4f7;
+  background: #ddd;
   margin: 0;
-}
-
-/* HEADER */
-.header {
-  background: black;
-  color: gold;
-  text-align: center;
-  padding: 15px;
-  font-weight: bold;
-}
-
-/* CARD INPUT */
-.card {
-  background: white;
-  margin: 20px;
   padding: 20px;
-  border-radius: 12px;
-}
-
-/* INPUT */
-input {
-  width: 100%;
-  padding: 12px;
-  margin: 8px 0;
-}
-
-/* BUTTON */
-button {
-  width: 100%;
-  padding: 12px;
-  background: gold;
-  border: none;
-  font-weight: bold;
-  margin-top: 10px;
 }
 
 /* TIKET */
 .ticket {
-  margin: 20px;
   background: white;
-  border-radius: 15px;
-  overflow: hidden;
-  display: none;
+  padding: 20px;
+  max-width: 700px;
+  margin: auto;
 }
 
-.ticket-header {
-  background: linear-gradient(to right, black, gold);
-  color: white;
-  padding: 15px;
+/* HEADER */
+.header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
 }
 
-.ticket-body {
-  padding: 15px;
-}
-
-.route {
-  font-size: 22px;
+.logo {
+  color: red;
+  font-size: 24px;
   font-weight: bold;
+}
+
+.line {
+  border-top: 2px solid black;
   margin: 10px 0;
+}
+
+/* SECTION */
+.section-title {
+  font-weight: bold;
+  font-size: 18px;
+  margin-top: 10px;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.col {
+  width: 48%;
+}
+
+.big {
+  font-size: 18px;
+  font-weight: bold;
 }
 
 .qr {
   text-align: center;
-  margin-top: 15px;
+  margin-top: 10px;
 }
 
-.download {
-  margin: 20px;
+.footer {
+  margin-top: 20px;
+  font-size: 12px;
+  color: #333;
+}
+
+button {
+  margin-top: 20px;
+  padding: 12px;
+  width: 100%;
+  background: black;
+  color: white;
+  border: none;
 }
 </style>
 
 </head>
 <body>
 
-<div class="header">✈️ CEK KODE PNR SEMUA MASKAPAI</div>
-
-<div class="card">
-<h3>Input Data Tiket</h3>
-
-<input id="nama" placeholder="Nama">
-<input id="pnr" placeholder="PNR">
-<input id="flight" placeholder="Flight">
-<input id="rute" placeholder="Jakarta - Bali">
-<input id="tanggal" placeholder="Tanggal">
-<input id="seat" placeholder="Seat">
-<input id="maskapai" placeholder="Maskapai">
-
-<button onclick="buat()">Buat Tiket</button>
-</div>
-
-<!-- TIKET -->
 <div id="tiket" class="ticket">
 
-<div class="ticket-header">
-<div id="flightH"></div>
-<div>MENUNGGU PEMBAYARAN</div>
+<div class="header">
+<div class="logo">LION GROUP</div>
+<div style="font-size:12px">
+E-Ticket Itinerary<br>
+Harap tunjukkan saat check-in
+</div>
 </div>
 
-<div class="ticket-body">
-<b id="namaH"></b><br>
-PNR: <span id="pnrH"></span><br><br>
+<div class="line"></div>
 
-<div class="route" id="ruteH"></div>
+<div class="section-title">Booking Details</div>
+Booking Reference: <b>ABC123</b><br>
+Issued Date: 10 Apr 2026
 
-Tanggal: <span id="tanggalH"></span><br>
-Seat: <span id="seatH"></span><br><br>
+<div class="line"></div>
 
-<div id="maskapaiH"></div>
+<div class="section-title">Passenger Details</div>
+1. Budi Santoso
+
+<div class="row">
+<div class="col">
+<div class="section-title">Itinerary</div>
+
+Flight: <b>JT-610</b><br><br>
+
+Depart<br>
+<div class="big">Jakarta (CGK)</div>
+10:00<br>
+10 Apr 2026
+</div>
+
+<div class="col">
+<div class="section-title">&nbsp;</div>
+
+Arrive<br>
+<div class="big">Surabaya (SUB)</div>
+12:00<br>
+10 Apr 2026
+</div>
+</div>
+
+<div class="row">
+<div>Bagasi: 20kg</div>
+<div>Class: Ekonomi</div>
+</div>
 
 <div class="qr">
-<img id="qrImg" width="120">
+<img src="https://api.qrserver.com/v1/create-qr-code/?size=120x120&data=ABC123">
+</div>
+
+<div class="line"></div>
+
+<div class="section-title">Fare Details</div>
+Total: <b>IDR 1.400.000</b>
+
+<div class="footer">
+Check-in minimal 90 menit sebelum keberangkatan<br>
+Tunjukkan e-tiket & identitas saat check-in
 </div>
 
 </div>
 
-</div>
-
-<div class="download">
 <button onclick="download()">Download E-Tiket</button>
-</div>
 
 <script>
-function buat() {
-  const nama = document.getElementById("nama").value;
-  const pnr = document.getElementById("pnr").value;
-  const flight = document.getElementById("flight").value;
-  const rute = document.getElementById("rute").value;
-  const tanggal = document.getElementById("tanggal").value;
-  const seat = document.getElementById("seat").value;
-  const maskapai = document.getElementById("maskapai").value;
-
-  document.getElementById("tiket").style.display = "block";
-
-  document.getElementById("namaH").innerText = nama;
-  document.getElementById("pnrH").innerText = pnr;
-  document.getElementById("flightH").innerText = flight;
-  document.getElementById("ruteH").innerText = rute.replace("-", "→");
-  document.getElementById("tanggalH").innerText = tanggal;
-  document.getElementById("seatH").innerText = seat;
-  document.getElementById("maskapaiH").innerText = maskapai;
-
-  // QR otomatis
-  document.getElementById("qrImg").src =
-    "https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=" + pnr;
-}
-
-// DOWNLOAD
 function download() {
   html2canvas(document.getElementById("tiket")).then(canvas => {
     const link = document.createElement("a");
-    link.download = "e-tiket.png";
+    link.download = "eticket.png";
     link.href = canvas.toDataURL();
     link.click();
   });
