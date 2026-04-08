@@ -3,43 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <title>Cek Booking Tiket</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f1f1f1;
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(135deg, #2c2c2c, #4b4b4b);
+      color: #333;
       text-align: center;
       padding: 40px;
     }
 
     .container {
-      max-width: 520px;
+      max-width: 500px;
       margin: auto;
-      background: #fff;
-      padding: 25px;
-      border-radius: 12px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      background: #ffffff;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      animation: fadeIn 0.5s ease-in-out;
     }
 
     h2 {
+      color: #444;
       margin-bottom: 20px;
     }
 
     input {
-      width: 80%;
+      width: 85%;
       padding: 12px;
       border: 1px solid #ccc;
       border-radius: 8px;
       margin-bottom: 15px;
+      outline: none;
+      transition: 0.3s;
+    }
+
+    input:focus {
+      border-color: #888;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
     }
 
     button {
       padding: 12px 25px;
-      background: #e60023;
+      background: #444;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 600;
+      transition: 0.3s;
+    }
+
+    button:hover {
+      background: #222;
     }
 
     .result {
@@ -48,60 +67,71 @@
     }
 
     .card {
-      background: #fafafa;
+      background: #f9f9f9;
       padding: 15px;
-      border-radius: 10px;
-      margin-top: 10px;
-      border-left: 5px solid #ccc;
+      border-radius: 12px;
+      margin-top: 15px;
+      border-left: 6px solid #999;
+      animation: slideUp 0.4s ease;
     }
 
     .confirmed {
-      border-left-color: green;
+      border-left-color: #28a745;
     }
 
     .pending {
-      border-left-color: orange;
+      border-left-color: #ffc107;
     }
 
     .status {
-      font-weight: bold;
-      padding: 5px 10px;
+      font-weight: 600;
+      padding: 6px 12px;
       border-radius: 6px;
       display: inline-block;
       margin-bottom: 10px;
+      font-size: 14px;
     }
 
     .status.confirmed {
-      background: #e6ffe6;
-      color: green;
+      background: #e6ffed;
+      color: #28a745;
     }
 
     .status.pending {
-      background: #fff3cd;
-      color: #856404;
+      background: #fff8e1;
+      color: #b8860b;
     }
 
     .error {
       color: red;
       font-weight: bold;
+      text-align: center;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px);}
+      to { opacity: 1; transform: translateY(0);}
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(15px);}
+      to { opacity: 1; transform: translateY(0);}
     }
   </style>
 </head>
 <body>
 
 <div class="container">
-  <h2>🔍 Cek Kode Booking</h2>
-  <input type="text" id="pnrInput" placeholder="Masukkan Kode Booking (PNR)">
+  <h2>✈️ Cek Kode Booking</h2>
+
+  <input type="text" id="pnrInput" placeholder="Masukkan Kode Booking">
   <br>
-  <button onclick="cekPNR()">Cek</button>
+  <button onclick="cekPNR()">Cek Sekarang</button>
 
   <div class="result" id="result"></div>
 </div>
 
 <script>
-/* =========================
-   DATABASE MULTI DATA
-========================= */
 const database = [
   {
     pnr: "FPVMCW",
@@ -130,9 +160,6 @@ const database = [
   }
 ];
 
-/* =========================
-   FUNCTION CEK PNR
-========================= */
 function cekPNR() {
   const input = document.getElementById("pnrInput").value.toUpperCase();
   const resultDiv = document.getElementById("result");
@@ -147,6 +174,7 @@ function cekPNR() {
       <div class="card ${statusClass}">
         <div class="status ${statusClass}">${statusText}</div>
 
+        <p><b>PNR:</b> ${data.pnr}</p>
         <p><b>Flight:</b> ${data.flight}</p>
         <p><b>Rute:</b> ${data.from} → ${data.to}</p>
         <p><b>Berangkat:</b> ${data.departure}</p>
