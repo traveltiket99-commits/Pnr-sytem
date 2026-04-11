@@ -8,16 +8,22 @@
 <style>
 body {
     margin: 0;
-    font-family: Arial;
-    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    font-family: 'Segoe UI', sans-serif;
+
+    background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
+
     background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .header {
     text-align: center;
     color: white;
     font-size: 24px;
+    font-weight: bold;
     padding: 20px;
 }
 
@@ -25,51 +31,73 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 80vh;
 }
 
 .card {
-    width: 350px;
-    padding: 20px;
-    border-radius: 15px;
-    background: rgba(255,255,255,0.15);
-    backdrop-filter: blur(10px);
+    width: 360px;
+    padding: 25px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(15px);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     color: white;
 }
 
-input, button {
+input {
     width: 100%;
     padding: 12px;
-    margin-top: 10px;
     border-radius: 10px;
     border: none;
+    margin-top: 10px;
 }
 
 button {
-    background: red;
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #e60000;
     color: white;
+    border: none;
+    border-radius: 10px;
     font-weight: bold;
+    cursor: pointer;
 }
 
 .result {
     margin-top: 20px;
     padding: 15px;
+    border-radius: 12px;
     background: rgba(255,255,255,0.2);
-    border-radius: 10px;
 }
 
-.flight {
-    margin-top: 10px;
-    padding: 10px;
-    background: rgba(0,0,0,0.3);
-    border-radius: 10px;
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+.label {
+    font-size: 12px;
+    color: #ddd;
+}
+
+.value {
+    font-weight: bold;
 }
 
 .badge {
-    background: #00ff88;
-    padding: 5px 10px;
-    border-radius: 10px;
-    color: black;
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.green { background: #00ff88; color: black; }
+
+.loading {
+    text-align: center;
+    margin-top: 15px;
 }
 </style>
 </head>
@@ -91,67 +119,106 @@ button {
 
 <script>
 
-// ✅ DATA SUDAH BENAR
 const data = {
-"LD13ZN": {
-nama: "Tn. Saiful Bahri",
-maskapai: "Batik Air",
-status: "Confirmed",
-kelas: "Ekonomi",
-bagasi: "20 kg",
-transit: "2j 50m di Jakarta",
-penerbangan: [
-{
-flight: "ID-6257",
-dari: "AAP (Samarinda)",
-ke: "CGK (Jakarta)",
-jam: "13:00 - 14:10"
+
+"ABC123": {
+nama: "Budi Santoso",
+maskapai: "Lion Air",
+flight: "JT-610",
+dari: "CGK (Jakarta)",
+ke: "DPS (Bali)",
+jam: "08:30",
+status: "Confirmed"
 },
-{
-flight: "ID-6576",
+
+"XYZ789": {
+nama: "Andi Saputra",
+maskapai: "Garuda Indonesia",
+flight: "GA-200",
 dari: "CGK (Jakarta)",
 ke: "SUB (Surabaya)",
-jam: "17:00 - 18:30"
+jam: "13:45",
+status: "Confirmed"
+},
+
+"QWE456": {
+nama: "Siti Aminah",
+maskapai: "AirAsia",
+flight: "AK-101",
+dari: "KUL (Malaysia)",
+ke: "CGK (Jakarta)",
+jam: "17:20",
+status: "Confirmed"
+},
+
+"JQKZUE": {
+nama: "Ny. Tiara Monova",
+maskapai: "Super Air Jet",
+flight: "IU-960",
+dari: "BTH (Batam)",
+ke: "DTB (Siborong-borong)",
+jam: "10:20",
+status: "Confirmed"
+},
+
+"JHUWEA": {
+nama: "Ny. Romauli Rajagukguk",
+maskapai: "Citilink",
+flight: "QG-884",
+dari: "CGK (Jakarta)",
+ke: "DTB (Silangit)",
+jam: "06:45",
+status: "Confirmed"
 }
-]
-}
+
 };
 
 function cek(){
 
-let pnr = document.getElementById("pnr").value.toUpperCase().trim();
-let hasil = document.getElementById("hasil");
+let pnr = document.getElementById("pnr").value.toUpperCase();
+let h = document.getElementById("hasil");
+
+h.innerHTML = `<div class="loading">⏳ Mengecek data...</div>`;
+
+setTimeout(() => {
 
 if(data[pnr]){
 
 let d = data[pnr];
 
-let html = `
+h.innerHTML = `
 <div class="result">
-<b>Nama:</b> ${d.nama}<br>
-<b>Maskapai:</b> ${d.maskapai}<br>
-<b>Status:</b> <span class="badge">${d.status}</span><br>
-<b>Kelas:</b> ${d.kelas}<br>
-<b>Bagasi:</b> ${d.bagasi}<br><br>
-`;
 
-d.penerbangan.forEach(f => {
-html += `
-<div class="flight">
-<b>${f.flight}</b><br>
-${f.dari} ➝ ${f.ke}<br>
-${f.jam}
+<div class="grid">
+<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
+<div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
+<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
+<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
+<div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
+<div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
+</div>
+
+<br>
+
+<div>
+<div class="label">Status</div>
+<span class="badge green">Confirmed</span>
+</div>
+
 </div>
 `;
-});
-
-html += `<br><b>Transit:</b> ${d.transit}</div>`;
-
-hasil.innerHTML = html;
 
 }else{
-hasil.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
+
+h.innerHTML = `
+<div class="result" style="color:red;">
+PNR tidak ditemukan
+</div>
+`;
+
 }
+
+}, 800);
 
 }
 
