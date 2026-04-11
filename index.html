@@ -9,20 +9,16 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-
     background:
     linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
-
     background-size: cover;
-    background-position: center;
 }
 
 .header {
     text-align: center;
     color: white;
     font-size: 24px;
-    font-weight: bold;
     padding: 20px;
 }
 
@@ -39,7 +35,6 @@ body {
     border-radius: 20px;
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(15px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     color: white;
 }
 
@@ -52,7 +47,7 @@ input, button {
 }
 
 button {
-    background: #e60000;
+    background: red;
     color: white;
     font-weight: bold;
 }
@@ -64,19 +59,18 @@ button {
     background: rgba(255,255,255,0.2);
 }
 
-.flight-box {
+.flight {
     margin-top: 10px;
     padding: 10px;
-    border-radius: 10px;
     background: rgba(0,0,0,0.3);
+    border-radius: 10px;
 }
 
 .badge {
-    padding: 6px 12px;
-    border-radius: 20px;
     background: #00ff88;
+    padding: 5px 10px;
+    border-radius: 10px;
     color: black;
-    font-weight: bold;
 }
 </style>
 </head>
@@ -100,18 +94,6 @@ button {
 
 const data = {
 
-// DATA LAMA
-"ABC123": {
-nama: "Budi Santoso",
-maskapai: "Lion Air",
-flight: "JT-610",
-dari: "CGK (Jakarta)",
-ke: "DPS (Bali)",
-jam: "08:30",
-status: "Confirmed"
-},
-
-// ✅ DATA BARU (MULTI FLIGHT)
 "LD13ZN": {
 nama: "Tn. Saiful Bahri",
 maskapai: "Batik Air",
@@ -152,18 +134,13 @@ let html = `
 <b>Nama:</b> ${d.nama}<br>
 <b>Maskapai:</b> ${d.maskapai}<br>
 <b>Status:</b> <span class="badge">${d.status}</span><br>
+<b>Kelas:</b> ${d.kelas}<br>
+<b>Bagasi:</b> ${d.bagasi}<br><br>
 `;
 
-if(d.kelas){
-html += `<b>Kelas:</b> ${d.kelas}<br>
-<b>Bagasi:</b> ${d.bagasi}<br>`;
-}
-
-// MULTI FLIGHT
-if(d.penerbangan){
 d.penerbangan.forEach(f => {
 html += `
-<div class="flight-box">
+<div class="flight">
 <b>${f.flight}</b><br>
 ${f.dari} ➝ ${f.ke}<br>
 ${f.jam}
@@ -171,22 +148,14 @@ ${f.jam}
 `;
 });
 
-html += `<br><b>Transit:</b> ${d.transit}`;
-}else{
-html += `
-<b>Flight:</b> ${d.flight}<br>
-<b>Dari:</b> ${d.dari}<br>
-<b>Ke:</b> ${d.ke}<br>
-<b>Jam:</b> ${d.jam}<br>
-`;
-}
-
-html += `</div>`;
+html += `<br><b>Transit:</b> ${d.transit}</div>`;
 
 h.innerHTML = html;
 
 }else{
+
 h.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
+
 }
 
 }
