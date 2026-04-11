@@ -94,8 +94,6 @@ button {
 }
 
 .green { background: #00ff88; color: black; }
-.orange { background: orange; color: black; }
-.red { background: red; color: white; }
 
 .loading {
     text-align: center;
@@ -123,7 +121,6 @@ button {
 
 const data = {
 
-// DATA CONTOH
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
@@ -141,7 +138,7 @@ flight: "GA-200",
 dari: "CGK (Jakarta)",
 ke: "SUB (Surabaya)",
 jam: "13:45",
-status: "Menunggu Pembayaran"
+status: "Confirmed"
 },
 
 "QWE456": {
@@ -154,7 +151,6 @@ jam: "17:20",
 status: "Confirmed"
 },
 
-// ✅ DATA TIKET 1 (SUPER AIR JET)
 "JQKZUE": {
 nama: "Ny. Tiara Monova",
 maskapai: "Super Air Jet",
@@ -165,7 +161,6 @@ jam: "10:20",
 status: "Confirmed"
 },
 
-// ✅ DATA TIKET 2 (CITILINK - MENUNGGU PEMBAYARAN)
 "JHUWEA": {
 nama: "Ny. Romauli Rajagukguk",
 maskapai: "Citilink",
@@ -173,7 +168,7 @@ flight: "QG-884",
 dari: "CGK (Jakarta)",
 ke: "DTB (Silangit)",
 jam: "06:45",
-status: "Menunggu Pembayaran"
+status: "Confirmed"
 }
 
 };
@@ -191,10 +186,6 @@ if(data[pnr]){
 
 let d = data[pnr];
 
-let warna = "green";
-if(d.status == "Menunggu Pembayaran") warna = "orange";
-if(d.status == "Canceled") warna = "red";
-
 h.innerHTML = `
 <div class="result">
 
@@ -211,7 +202,7 @@ h.innerHTML = `
 
 <div>
 <div class="label">Status</div>
-<span class="badge ${warna}">${d.status}</span>
+<span class="badge green">Confirmed</span>
 </div>
 
 </div>
