@@ -8,9 +8,8 @@
 <style>
 body {
     margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background:
-    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    font-family: Arial;
+    background: linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
     background-size: cover;
 }
@@ -26,15 +25,15 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
 }
 
 .card {
-    width: 360px;
-    padding: 25px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(15px);
+    width: 350px;
+    padding: 20px;
+    border-radius: 15px;
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(10px);
     color: white;
 }
 
@@ -55,8 +54,8 @@ button {
 .result {
     margin-top: 20px;
     padding: 15px;
-    border-radius: 12px;
     background: rgba(255,255,255,0.2);
+    border-radius: 10px;
 }
 
 .flight {
@@ -92,8 +91,8 @@ button {
 
 <script>
 
+// ✅ DATA SUDAH BENAR
 const data = {
-
 "LD13ZN": {
 nama: "Tn. Saiful Bahri",
 maskapai: "Batik Air",
@@ -101,7 +100,6 @@ status: "Confirmed",
 kelas: "Ekonomi",
 bagasi: "20 kg",
 transit: "2j 50m di Jakarta",
-
 penerbangan: [
 {
 flight: "ID-6257",
@@ -117,13 +115,12 @@ jam: "17:00 - 18:30"
 }
 ]
 }
-
 };
 
 function cek(){
 
-let pnr = document.getElementById("pnr").value.toUpperCase();
-let h = document.getElementById("hasil");
+let pnr = document.getElementById("pnr").value.toUpperCase().trim();
+let hasil = document.getElementById("hasil");
 
 if(data[pnr]){
 
@@ -150,12 +147,10 @@ ${f.jam}
 
 html += `<br><b>Transit:</b> ${d.transit}</div>`;
 
-h.innerHTML = html;
+hasil.innerHTML = html;
 
 }else{
-
-h.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
-
+hasil.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
 }
 
 }
