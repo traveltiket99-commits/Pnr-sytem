@@ -16,7 +16,6 @@ body {
 
     background-size: cover;
     background-position: center;
-    background-repeat: no-repeat;
 }
 
 .header {
@@ -31,7 +30,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    min-height: 100vh;
 }
 
 .card {
@@ -44,24 +43,18 @@ body {
     color: white;
 }
 
-input {
+input, button {
     width: 100%;
     padding: 12px;
+    margin-top: 10px;
     border-radius: 10px;
     border: none;
-    margin-top: 10px;
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
     background: #e60000;
     color: white;
-    border: none;
-    border-radius: 10px;
     font-weight: bold;
-    cursor: pointer;
 }
 
 .result {
@@ -71,33 +64,19 @@ button {
     background: rgba(255,255,255,0.2);
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
-
-.label {
-    font-size: 12px;
-    color: #ddd;
-}
-
-.value {
-    font-weight: bold;
+.flight-box {
+    margin-top: 10px;
+    padding: 10px;
+    border-radius: 10px;
+    background: rgba(0,0,0,0.3);
 }
 
 .badge {
     padding: 6px 12px;
     border-radius: 20px;
-    font-size: 12px;
+    background: #00ff88;
+    color: black;
     font-weight: bold;
-}
-
-.green { background: #00ff88; color: black; }
-
-.loading {
-    text-align: center;
-    margin-top: 15px;
 }
 </style>
 </head>
@@ -121,6 +100,7 @@ button {
 
 const data = {
 
+// DATA LAMA
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
@@ -131,44 +111,29 @@ jam: "08:30",
 status: "Confirmed"
 },
 
-"XYZ789": {
-nama: "Andi Saputra",
-maskapai: "Garuda Indonesia",
-flight: "GA-200",
+// ✅ DATA BARU (MULTI FLIGHT)
+"LD13ZN": {
+nama: "Tn. Saiful Bahri",
+maskapai: "Batik Air",
+status: "Confirmed",
+kelas: "Ekonomi",
+bagasi: "20 kg",
+transit: "2j 50m di Jakarta",
+
+penerbangan: [
+{
+flight: "ID-6257",
+dari: "AAP (Samarinda)",
+ke: "CGK (Jakarta)",
+jam: "13:00 - 14:10"
+},
+{
+flight: "ID-6576",
 dari: "CGK (Jakarta)",
 ke: "SUB (Surabaya)",
-jam: "13:45",
-status: "Confirmed"
-},
-
-"QWE456": {
-nama: "Siti Aminah",
-maskapai: "AirAsia",
-flight: "AK-101",
-dari: "KUL (Malaysia)",
-ke: "CGK (Jakarta)",
-jam: "17:20",
-status: "Confirmed"
-},
-
-"JQKZUE": {
-nama: "Ny. Tiara Monova",
-maskapai: "Super Air Jet",
-flight: "IU-960",
-dari: "BTH (Batam)",
-ke: "DTB (Siborong-borong)",
-jam: "10:20",
-status: "Confirmed"
-},
-
-"JHUWEA": {
-nama: "Ny. Romauli Rajagukguk",
-maskapai: "Citilink",
-flight: "QG-884",
-dari: "CGK (Jakarta)",
-ke: "DTB (Silangit)",
-jam: "06:45",
-status: "Confirmed"
+jam: "17:00 - 18:30"
+}
+]
 }
 
 };
@@ -178,47 +143,51 @@ function cek(){
 let pnr = document.getElementById("pnr").value.toUpperCase();
 let h = document.getElementById("hasil");
 
-h.innerHTML = `<div class="loading">⏳ Mengecek data...</div>`;
-
-setTimeout(() => {
-
 if(data[pnr]){
 
 let d = data[pnr];
 
-h.innerHTML = `
+let html = `
 <div class="result">
-
-<div class="grid">
-<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
-<div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
-<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
-<div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
-<div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
-</div>
-
-<br>
-
-<div>
-<div class="label">Status</div>
-<span class="badge green">Confirmed</span>
-</div>
-
-</div>
+<b>Nama:</b> ${d.nama}<br>
+<b>Maskapai:</b> ${d.maskapai}<br>
+<b>Status:</b> <span class="badge">${d.status}</span><br>
 `;
 
-}else{
-
-h.innerHTML = `
-<div class="result" style="color:red;">
-PNR tidak ditemukan
-</div>
-`;
-
+if(d.kelas){
+html += `<b>Kelas:</b> ${d.kelas}<br>
+<b>Bagasi:</b> ${d.bagasi}<br>`;
 }
 
-}, 800);
+// MULTI FLIGHT
+if(d.penerbangan){
+d.penerbangan.forEach(f => {
+html += `
+<div class="flight-box">
+<b>${f.flight}</b><br>
+${f.dari} ➝ ${f.ke}<br>
+${f.jam}
+</div>
+`;
+});
+
+html += `<br><b>Transit:</b> ${d.transit}`;
+}else{
+html += `
+<b>Flight:</b> ${d.flight}<br>
+<b>Dari:</b> ${d.dari}<br>
+<b>Ke:</b> ${d.ke}<br>
+<b>Jam:</b> ${d.jam}<br>
+`;
+}
+
+html += `</div>`;
+
+h.innerHTML = html;
+
+}else{
+h.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
+}
 
 }
 
