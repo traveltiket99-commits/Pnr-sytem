@@ -1,205 +1,239 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Cek Booking Tiket</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Flight PNR Checker</title>
 
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
 
-  <style>
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(135deg, #2c2c2c, #4b4b4b);
-      color: #333;
-      text-align: center;
-      padding: 40px;
-    }
+    background:
+    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
+    url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
 
-    .container {
-      max-width: 500px;
-      margin: auto;
-      background: #ffffff;
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-      animation: fadeIn 0.5s ease-in-out;
-    }
+    background-size: cover;
+    background-position: center;
+}
 
-    h2 {
-      color: #444;
-      margin-bottom: 20px;
-    }
+/* HEADER */
+.header {
+    text-align: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 20px;
+}
 
-    input {
-      width: 85%;
-      padding: 12px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      margin-bottom: 15px;
-      outline: none;
-      transition: 0.3s;
-    }
+/* CENTER */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80vh;
+}
 
-    input:focus {
-      border-color: #888;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    }
+/* CARD */
+.card {
+    width: 360px;
+    padding: 25px;
+    border-radius: 20px;
 
-    button {
-      padding: 12px 25px;
-      background: #444;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      font-weight: 600;
-      transition: 0.3s;
-    }
+    background: rgba(255,255,255,0.12);
+    backdrop-filter: blur(15px);
 
-    button:hover {
-      background: #222;
-    }
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+    color: white;
+}
 
-    .result {
-      margin-top: 25px;
-      text-align: left;
-    }
+/* INPUT */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    margin-top: 10px;
+}
 
-    .card {
-      background: #f9f9f9;
-      padding: 15px;
-      border-radius: 12px;
-      margin-top: 15px;
-      border-left: 6px solid #999;
-      animation: slideUp 0.4s ease;
-    }
+/* BUTTON */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
 
-    .confirmed {
-      border-left-color: #28a745;
-    }
+    background: #e60000;
+    color: white;
 
-    .pending {
-      border-left-color: #ffc107;
-    }
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+}
 
-    .status {
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 6px;
-      display: inline-block;
-      margin-bottom: 10px;
-      font-size: 14px;
-    }
+button:hover {
+    background: #ff0000;
+}
 
-    .status.confirmed {
-      background: #e6ffed;
-      color: #28a745;
-    }
+/* RESULT */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.2);
+}
 
-    .status.pending {
-      background: #fff8e1;
-      color: #b8860b;
-    }
+/* GRID */
+.grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
 
-    .error {
-      color: red;
-      font-weight: bold;
-      text-align: center;
-    }
+.label {
+    font-size: 12px;
+    color: #ddd;
+}
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(10px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
+.value {
+    font-weight: bold;
+}
 
-    @keyframes slideUp {
-      from { opacity: 0; transform: translateY(15px);}
-      to { opacity: 1; transform: translateY(0);}
-    }
-  </style>
+/* STATUS */
+.badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.green { background: #00ff88; color: black; }
+.orange { background: orange; color: black; }
+.red { background: red; color: white; }
+
+.loading {
+    text-align: center;
+    margin-top: 15px;
+}
+</style>
 </head>
+
 <body>
 
+<div class="header">✈️ Flight PNR Checker</div>
+
 <div class="container">
-  <h2>✈️ Cek Kode Booking</h2>
+<div class="card">
 
-  <input type="text" id="pnrInput" placeholder="Masukkan Kode Booking">
-  <br>
-  <button onclick="cekPNR()">Cek Sekarang</button>
+<input id="pnr" placeholder="Masukkan kode PNR">
+<button onclick="cek()">Cek Status</button>
 
-  <div class="result" id="result"></div>
+<div id="hasil"></div>
+
+</div>
 </div>
 
 <script>
-const database = [
-  {
-    pnr: "FPVMCW",
-    status: "confirmed",
-    flight: "JT-664",
-    from: "Yogyakarta (YIA)",
-    to: "Makassar (UPG)",
-    departure: "08 Apr 2026 - 20:00",
-    arrival: "08 Apr 2026 - 22:55",
-    passengers: [
-      { name: "Achmad Fachruddin", seat: "A17", ticket: "99990183059" },
-      { name: "Fajriah M", seat: "B17", ticket: "999901256749" }
-    ]
-  },
-  {
-    pnr: "PAY123",
-    status: "pending",
-    flight: "JT-720",
-    from: "Jakarta (CGK)",
-    to: "Bali (DPS)",
-    departure: "10 Apr 2026 - 09:00",
-    arrival: "10 Apr 2026 - 11:45",
-    passengers: [
-      { name: "Budi Santoso", seat: "C12", ticket: "888777666" }
-    ]
-  }
-];
 
-function cekPNR() {
-  const input = document.getElementById("pnrInput").value.toUpperCase();
-  const resultDiv = document.getElementById("result");
+// DATABASE PNR
+const data = {
 
-  const data = database.find(b => b.pnr === input);
+"ABC123": {
+nama: "Budi Santoso",
+maskapai: "Lion Air",
+flight: "JT-610",
+dari: "CGK (Jakarta)",
+ke: "DPS (Bali)",
+jam: "08:30",
+status: "Confirmed"
+},
 
-  if (data) {
-    let statusText = data.status === "confirmed" ? "Confirmed" : "Menunggu Pembayaran";
-    let statusClass = data.status === "confirmed" ? "confirmed" : "pending";
+"XYZ789": {
+nama: "Andi Saputra",
+maskapai: "Garuda Indonesia",
+flight: "GA-200",
+dari: "CGK (Jakarta)",
+ke: "SUB (Surabaya)",
+jam: "13:45",
+status: "Menunggu Pembayaran"
+},
 
-    let html = `
-      <div class="card ${statusClass}">
-        <div class="status ${statusClass}">${statusText}</div>
+"QWE456": {
+nama: "Siti Aminah",
+maskapai: "AirAsia",
+flight: "AK-101",
+dari: "KUL (Malaysia)",
+ke: "CGK (Jakarta)",
+jam: "17:20",
+status: "Confirmed"
+},
 
-        <p><b>PNR:</b> ${data.pnr}</p>
-        <p><b>Flight:</b> ${data.flight}</p>
-        <p><b>Rute:</b> ${data.from} → ${data.to}</p>
-        <p><b>Berangkat:</b> ${data.departure}</p>
-        <p><b>Tiba:</b> ${data.arrival}</p>
-
-        <h4>Penumpang:</h4>
-    `;
-
-    data.passengers.forEach(p => {
-      html += `
-        <p>
-          ${p.name}<br>
-          Seat: ${p.seat}<br>
-          Ticket: ${p.ticket}
-        </p>
-      `;
-    });
-
-    html += `</div>`;
-    resultDiv.innerHTML = html;
-
-  } else {
-    resultDiv.innerHTML = "<p class='error'>Kode booking tidak ditemukan!</p>";
-  }
+// ✅ DATA DARI TIKET KAMU
+"JQKZUE": {
+nama: "Ny. Tiara Monova",
+maskapai: "Super Air Jet",
+flight: "IU-960",
+dari: "BTH (Batam)",
+ke: "DTB (Siborong-borong)",
+jam: "10:20",
+status: "Confirmed"
 }
+
+};
+
+function cek(){
+
+let pnr = document.getElementById("pnr").value.toUpperCase();
+let h = document.getElementById("hasil");
+
+h.innerHTML = `<div class="loading">⏳ Mengecek data...</div>`;
+
+setTimeout(() => {
+
+if(data[pnr]){
+
+let d = data[pnr];
+
+let warna = "green";
+if(d.status == "Menunggu Pembayaran") warna = "orange";
+
+h.innerHTML = `
+<div class="result">
+
+<div class="grid">
+<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
+<div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
+<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
+<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
+<div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
+<div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
+</div>
+
+<br>
+
+<div>
+<div class="label">Status</div>
+<span class="badge ${warna}">${d.status}</span>
+</div>
+
+</div>
+`;
+
+}else{
+
+h.innerHTML = `
+<div class="result" style="color:red;">
+PNR tidak ditemukan
+</div>
+`;
+
+}
+
+}, 800);
+
+}
+
 </script>
 
 </body>
