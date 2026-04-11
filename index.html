@@ -169,6 +169,17 @@ dari: "CGK (Jakarta)",
 ke: "DTB (Silangit)",
 jam: "06:45",
 status: "Confirmed"
+},
+
+// ✅ DATA BARU YANG KAMU MINTA
+"G5PDZT": {
+nama: "Sdr. Sakkot Parhat Harahap",
+maskapai: "TransNusa / Pelita Air",
+flight: "8B-5532 / IP-647",
+dari: "CGK (Jakarta)",
+ke: "BPN (Balikpapan)",
+jam: "16:05 - 11:25",
+status: "Hold (Menunggu Pembayaran)"
 }
 
 };
@@ -202,7 +213,7 @@ h.innerHTML = `
 
 <div>
 <div class="label">Status</div>
-<span class="badge green">Confirmed</span>
+<span class="badge green">${d.status}</span>
 </div>
 
 </div>
