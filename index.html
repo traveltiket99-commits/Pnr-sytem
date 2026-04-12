@@ -9,14 +9,10 @@
 body {
     margin: 0;
     font-family: 'Segoe UI', sans-serif;
-
     background:
     linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
     url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
-
     background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
 }
 
 .header {
@@ -31,20 +27,22 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 80vh;
+    height: 90vh;
 }
 
 .card {
-    width: 360px;
+    width: 380px;
     padding: 25px;
     border-radius: 20px;
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(15px);
     box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     color: white;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-input {
+input, button {
     width: 100%;
     padding: 12px;
     border-radius: 10px;
@@ -53,15 +51,9 @@ input {
 }
 
 button {
-    width: 100%;
-    padding: 12px;
-    margin-top: 10px;
     background: #e60000;
     color: white;
-    border: none;
-    border-radius: 10px;
     font-weight: bold;
-    cursor: pointer;
 }
 
 .result {
@@ -77,14 +69,8 @@ button {
     gap: 10px;
 }
 
-.label {
-    font-size: 12px;
-    color: #ddd;
-}
-
-.value {
-    font-weight: bold;
-}
+.label { font-size: 12px; color: #ddd; }
+.value { font-weight: bold; }
 
 .badge {
     padding: 6px 12px;
@@ -96,10 +82,7 @@ button {
 .green { background: #00ff88; color: black; }
 .orange { background: orange; color: black; }
 
-.loading {
-    text-align: center;
-    margin-top: 15px;
-}
+.loading { text-align: center; margin-top: 15px; }
 </style>
 </head>
 
@@ -122,6 +105,7 @@ button {
 
 const data = {
 
+// ✅ DATA LAMA TETAP ADA
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
@@ -200,6 +184,32 @@ dari: "UPG (Makassar)",
 ke: "DJJ (Jayapura)",
 jam: "01:35 - 06:05",
 status: "Menunggu Pembayaran"
+},
+
+// ✅ DATA BARU (9 PENUMPANG)
+"SJ6R2K": {
+nama: "9 Penumpang",
+maskapai: "Sriwijaya Air",
+flight: "SJ-598 / SJ-538",
+dari: "CGK (Jakarta)",
+ke: "MOH (Morowali)",
+jam: "22:15 - 09:40",
+status: "Menunggu Pembayaran",
+
+penumpang: [
+"Aluna Khumairah",
+"Sarwia Matta",
+"Moh. Hizam",
+"Ilham Hasan",
+"Fajriah",
+"Ilfa Khairunnisa Hasan",
+"Diva Salsabilah Hasan",
+"Tiara Hafizah Hasan",
+"Ana Qoriah Maryam"
+],
+
+tanggal: "13-14 April 2026",
+total: "Rp 11.448.600"
 }
 
 };
@@ -216,8 +226,6 @@ setTimeout(() => {
 if(data[pnr]){
 
 let d = data[pnr];
-
-// 🔥 AUTO WARNA STATUS
 let warna = d.status.includes("Menunggu") ? "orange" : "green";
 
 h.innerHTML = `
@@ -231,6 +239,24 @@ h.innerHTML = `
 <div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
 <div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
 </div>
+
+${d.penumpang ? `
+<div style="margin-top:10px;">
+<div class="label">Penumpang</div>
+<div class="value">${d.penumpang.join("<br>")}</div>
+</div>` : ""}
+
+${d.tanggal ? `
+<div style="margin-top:10px;">
+<div class="label">Tanggal</div>
+<div class="value">${d.tanggal}</div>
+</div>` : ""}
+
+${d.total ? `
+<div style="margin-top:10px;">
+<div class="label">Total</div>
+<div class="value">${d.total}</div>
+</div>` : ""}
 
 <br>
 
