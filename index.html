@@ -94,6 +94,7 @@ button {
 }
 
 .green { background: #00ff88; color: black; }
+.orange { background: orange; color: black; }
 
 .loading {
     text-align: center;
@@ -178,10 +179,9 @@ flight: "8B-5532 / IP-647",
 dari: "CGK (Jakarta)",
 ke: "BPN (Balikpapan)",
 jam: "16:05 - 11:25",
-status: "Hold (Menunggu Pembayaran)"
+status: "Menunggu Pembayaran"
 },
 
-// ✅ DATA AIRASIA BARU
 "CNIKP8": {
 nama: "Ny. Siti Nurmama",
 maskapai: "AirAsia",
@@ -190,13 +190,23 @@ dari: "PNK (Pontianak)",
 ke: "KUL (Kuala Lumpur)",
 jam: "11:05 - 13:45",
 status: "Menunggu Pembayaran"
+},
+
+"NC3HYR": {
+nama: "Sdr. Amiruddin",
+maskapai: "Lion Air",
+flight: "JT-798",
+dari: "UPG (Makassar)",
+ke: "DJJ (Jayapura)",
+jam: "01:35 - 06:05",
+status: "Menunggu Pembayaran"
 }
 
 };
 
 function cek(){
 
-let pnr = document.getElementById("pnr").value.toUpperCase();
+let pnr = document.getElementById("pnr").value.toUpperCase().trim();
 let h = document.getElementById("hasil");
 
 h.innerHTML = `<div class="loading">⏳ Mengecek data...</div>`;
@@ -206,6 +216,9 @@ setTimeout(() => {
 if(data[pnr]){
 
 let d = data[pnr];
+
+// 🔥 AUTO WARNA STATUS
+let warna = d.status.includes("Menunggu") ? "orange" : "green";
 
 h.innerHTML = `
 <div class="result">
@@ -223,7 +236,7 @@ h.innerHTML = `
 
 <div>
 <div class="label">Status</div>
-<span class="badge green">${d.status}</span>
+<span class="badge ${warna}">${d.status}</span>
 </div>
 
 </div>
