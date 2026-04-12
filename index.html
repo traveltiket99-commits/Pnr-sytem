@@ -19,7 +19,6 @@ body {
     text-align: center;
     color: white;
     font-size: 24px;
-    font-weight: bold;
     padding: 20px;
 }
 
@@ -36,7 +35,6 @@ body {
     border-radius: 20px;
     background: rgba(255,255,255,0.12);
     backdrop-filter: blur(15px);
-    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
     color: white;
     max-height: 90vh;
     overflow-y: auto;
@@ -82,6 +80,18 @@ button {
 .green { background: #00ff88; color: black; }
 .orange { background: orange; color: black; }
 
+.timer {
+    background: orange;
+    color: black;
+    text-align: center;
+    font-size: 22px;
+    padding: 10px;
+    border-radius: 10px;
+    margin-top: 10px;
+}
+
+.red { background: red; color: white; }
+
 .loading { text-align: center; margin-top: 15px; }
 </style>
 </head>
@@ -105,7 +115,7 @@ button {
 
 const data = {
 
-// ✅ DATA LAMA TETAP ADA
+// ✅ SEMUA DATA LAMA KAMU (TIDAK DIHAPUS)
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
@@ -186,7 +196,7 @@ jam: "01:35 - 06:05",
 status: "Menunggu Pembayaran"
 },
 
-// ✅ DATA BARU (9 PENUMPANG)
+// ✅ DATA BARU (DITAMBAHKAN SAJA)
 "SJ6R2K": {
 nama: "9 Penumpang",
 maskapai: "Sriwijaya Air",
@@ -214,7 +224,11 @@ total: "Rp 11.448.600"
 
 };
 
+let timerInterval;
+
 function cek(){
+
+clearInterval(timerInterval);
 
 let pnr = document.getElementById("pnr").value.toUpperCase().trim();
 let h = document.getElementById("hasil");
@@ -228,7 +242,7 @@ if(data[pnr]){
 let d = data[pnr];
 let warna = d.status.includes("Menunggu") ? "orange" : "green";
 
-h.innerHTML = `
+let html = `
 <div class="result">
 
 <div class="grid">
@@ -239,47 +253,94 @@ h.innerHTML = `
 <div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
 <div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
 </div>
+`;
 
-${d.penumpang ? `
+// penumpang
+if(d.penumpang){
+html += `
 <div style="margin-top:10px;">
 <div class="label">Penumpang</div>
 <div class="value">${d.penumpang.join("<br>")}</div>
-</div>` : ""}
+</div>`;
+}
 
-${d.tanggal ? `
-<div style="margin-top:10px;">
-<div class="label">Tanggal</div>
-<div class="value">${d.tanggal}</div>
-</div>` : ""}
-
-${d.total ? `
+// total
+if(d.total){
+html += `
 <div style="margin-top:10px;">
 <div class="label">Total</div>
 <div class="value">${d.total}</div>
-</div>` : ""}
+</div>`;
+}
 
+html += `
 <br>
-
 <div>
 <div class="label">Status</div>
 <span class="badge ${warna}">${d.status}</span>
 </div>
+`;
 
+// timer hanya untuk status menunggu
+if(d.status.includes("Menunggu")){
+html += `
+<div class="timer" id="timer">Loading...</div>
+
+<div style="margin-top:10px;">
+<div class="label">Pembayaran</div>
+<div class="value">
+BRI - SUCI RAHMADINI<br>
+370001014122504
+</div>
 </div>
 `;
+
+setTimeout(startTimer,100);
+}
+
+html += `</div>`;
+
+h.innerHTML = html;
 
 }else{
-
-h.innerHTML = `
-<div class="result" style="color:red;">
-PNR tidak ditemukan
-</div>
-`;
-
+h.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
 }
 
 }, 800);
 
+}
+
+// TIMER JAM 09:00
+function startTimer(){
+
+const deadline = new Date();
+deadline.setHours(9,0,0,0);
+
+timerInterval = setInterval(()=>{
+
+let now = new Date();
+let diff = deadline - now;
+let el = document.getElementById("timer");
+
+if(!el) return;
+
+if(diff <= 0){
+el.innerHTML = "WAKTU HABIS";
+el.classList.add("red");
+clearInterval(timerInterval);
+return;
+}
+
+let h = Math.floor(diff/3600000);
+let m = Math.floor((diff%3600000)/60000);
+let s = Math.floor((diff%60000)/1000);
+
+el.innerHTML =
+String(h).padStart(2,'0')+":"+
+String(m).padStart(2,'0')+":"+
+String(s).padStart(2,'0');
+
+},1000);
 }
 
 </script>
