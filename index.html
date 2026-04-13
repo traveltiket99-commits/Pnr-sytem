@@ -115,7 +115,7 @@ button {
 
 const data = {
 
-// ✅ SEMUA DATA LAMA KAMU (TIDAK DIHAPUS)
+// 🔒 DATA LAMA (TIDAK DIUBAH)
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
@@ -136,90 +136,19 @@ jam: "13:45",
 status: "Confirmed"
 },
 
-"QWE456": {
-nama: "Siti Aminah",
-maskapai: "AirAsia",
-flight: "AK-101",
-dari: "KUL (Malaysia)",
+// 🔥 DATA BARU (BATIK AIR)
+"BTK147M": {
+nama: "Ny. Isna",
+maskapai: "Batik Air",
+flight: "ID-6763",
+dari: "MDC (Manado)",
 ke: "CGK (Jakarta)",
-jam: "17:20",
-status: "Confirmed"
-},
-
-"JQKZUE": {
-nama: "Ny. Tiara Monova",
-maskapai: "Super Air Jet",
-flight: "IU-960",
-dari: "BTH (Batam)",
-ke: "DTB (Siborong-borong)",
-jam: "10:20",
-status: "Confirmed"
-},
-
-"JHUWEA": {
-nama: "Ny. Romauli Rajagukguk",
-maskapai: "Citilink",
-flight: "QG-884",
-dari: "CGK (Jakarta)",
-ke: "DTB (Silangit)",
-jam: "06:45",
-status: "Confirmed"
-},
-
-"G5PDZT": {
-nama: "Sdr. Sakkot Parhat Harahap",
-maskapai: "TransNusa / Pelita Air",
-flight: "8B-5532 / IP-647",
-dari: "CGK (Jakarta)",
-ke: "BPN (Balikpapan)",
-jam: "16:05 - 11:25",
-status: "Menunggu Pembayaran"
-},
-
-"CNIKP8": {
-nama: "Ny. Siti Nurmama",
-maskapai: "AirAsia",
-flight: "AK-491",
-dari: "PNK (Pontianak)",
-ke: "KUL (Kuala Lumpur)",
-jam: "11:05 - 13:45",
-status: "Menunggu Pembayaran"
-},
-
-"NC3HYR": {
-nama: "Sdr. Amiruddin",
-maskapai: "Lion Air",
-flight: "JT-798",
-dari: "UPG (Makassar)",
-ke: "DJJ (Jayapura)",
-jam: "01:35 - 06:05",
-status: "Menunggu Pembayaran"
-},
-
-// ✅ DATA BARU (DITAMBAHKAN SAJA)
-"SJ6R2K": {
-nama: "9 Penumpang",
-maskapai: "Sriwijaya Air",
-flight: "SJ-598 / SJ-538",
-dari: "CGK (Jakarta)",
-ke: "MOH (Morowali)",
-jam: "22:15 - 09:40",
+jam: "16:45 - 21:45",
 status: "Menunggu Pembayaran",
-
-penumpang: [
-"Aluna Khumairah",
-"Sarwia Matta",
-"Moh. Hizam",
-"Ilham Hasan",
-"Fajriah",
-"Ilfa Khairunnisa Hasan",
-"Diva Salsabilah Hasan",
-"Tiara Hafizah Hasan",
-"Ana Qoriah Maryam"
-],
-
-tanggal: "13-14 April 2026",
-total: "Rp 11.448.600"
+kelas: "Ekonomi",
+bagasi: "20 kg",
+tanggal: "14 April 2026",
+total: "Rp 2.317.800"
 }
 
 };
@@ -255,16 +184,22 @@ let html = `
 </div>
 `;
 
-// penumpang
-if(d.penumpang){
+if(d.kelas){
 html += `
 <div style="margin-top:10px;">
-<div class="label">Penumpang</div>
-<div class="value">${d.penumpang.join("<br>")}</div>
+<div class="label">Kelas</div>
+<div class="value">${d.kelas}</div>
 </div>`;
 }
 
-// total
+if(d.bagasi){
+html += `
+<div style="margin-top:10px;">
+<div class="label">Bagasi</div>
+<div class="value">${d.bagasi}</div>
+</div>`;
+}
+
 if(d.total){
 html += `
 <div style="margin-top:10px;">
@@ -281,16 +216,19 @@ html += `
 </div>
 `;
 
-// timer hanya untuk status menunggu
+// 🔥 TIMER 30 MENIT
 if(d.status.includes("Menunggu")){
+
 html += `
-<div class="timer" id="timer">Loading...</div>
+<div class="timer" id="timer">30:00</div>
 
 <div style="margin-top:10px;">
 <div class="label">Pembayaran</div>
 <div class="value">
-BRI - SUCI RAHMADINI<br>
-370001014122504
+BANK BRI<br>
+A/N: SUCI RAHMADINI<br>
+3700-0101-4122-504<br>
+Kode Bank: 002
 </div>
 </div>
 `;
@@ -299,7 +237,6 @@ setTimeout(startTimer,100);
 }
 
 html += `</div>`;
-
 h.innerHTML = html;
 
 }else{
@@ -310,35 +247,30 @@ h.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`
 
 }
 
-// TIMER JAM 09:00
+// ⏱️ TIMER 30 MENIT
 function startTimer(){
 
-const deadline = new Date();
-deadline.setHours(9,0,0,0);
+let time = 1800; // 30 menit
 
 timerInterval = setInterval(()=>{
 
-let now = new Date();
-let diff = deadline - now;
 let el = document.getElementById("timer");
-
 if(!el) return;
 
-if(diff <= 0){
+let m = Math.floor(time / 60);
+let s = time % 60;
+
+el.innerHTML =
+String(m).padStart(2,'0') + ":" +
+String(s).padStart(2,'0');
+
+if(time <= 0){
 el.innerHTML = "WAKTU HABIS";
 el.classList.add("red");
 clearInterval(timerInterval);
-return;
 }
 
-let h = Math.floor(diff/3600000);
-let m = Math.floor((diff%3600000)/60000);
-let s = Math.floor((diff%60000)/1000);
-
-el.innerHTML =
-String(h).padStart(2,'0')+":"+
-String(m).padStart(2,'0')+":"+
-String(s).padStart(2,'0');
+time--;
 
 },1000);
 }
