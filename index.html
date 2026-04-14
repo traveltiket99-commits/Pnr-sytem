@@ -115,7 +115,6 @@ button {
 
 const data = {
 
-// DATA LAMA
 "ABC123": {
 nama: "Budi Santoso",
 maskapai: "Lion Air",
@@ -150,7 +149,6 @@ tanggal: "14 April 2026",
 total: "Rp 2.317.800"
 },
 
-// DATA BARU
 "LN1732S": {
 nama: "Tn. Sulisyono",
 maskapai: "Lion Air",
@@ -166,6 +164,7 @@ bagasi: "20 kg",
 total: "Rp 1.732.800"
 },
 
+// ✅ STATUS SUDAH DIUBAH JADI CONFIRMED
 "JHMAUZ": {
 nama: "Ny. Muliani",
 maskapai: "Batik Air",
@@ -173,8 +172,10 @@ flight: "ID-6316",
 dari: "PNK (Pontianak)",
 ke: "UPG (Makassar)",
 jam: "14:55 - 19:20",
-status: "Menunggu Pembayaran",
+status: "Confirmed",
+
 penumpang: ["Ny. Muliani"],
+
 tanggal: "18 April 2026",
 kelas: "Ekonomi",
 bagasi: "20 kg",
@@ -231,7 +232,7 @@ html += `<div style="margin-top:10px;"><div class="label">Total</div><div class=
 
 html += `<br><div><div class="label">Status</div><span class="badge ${warna}">${d.status}</span></div>`;
 
-// TIMER
+// TIMER hanya untuk menunggu
 if(d.status.includes("Menunggu")){
 html += `
 <div class="timer" id="timer">30:00</div>
