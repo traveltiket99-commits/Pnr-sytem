@@ -164,7 +164,6 @@ bagasi: "20 kg",
 total: "Rp 1.732.800"
 },
 
-// ✅ STATUS SUDAH DIUBAH JADI CONFIRMED
 "JHMAUZ": {
 nama: "Ny. Muliani",
 maskapai: "Batik Air",
@@ -173,13 +172,32 @@ dari: "PNK (Pontianak)",
 ke: "UPG (Makassar)",
 jam: "14:55 - 19:20",
 status: "Confirmed",
-
 penumpang: ["Ny. Muliani"],
-
 tanggal: "18 April 2026",
 kelas: "Ekonomi",
 bagasi: "20 kg",
 total: "Rp 1.739.900"
+},
+
+// ✅ DATA BARU TANPA REKENING
+"FPVMCW": {
+nama: "Tn. Iman Kalvhin Fauzadin & Tn. Kurniawan",
+maskapai: "Lion Air",
+flight: "JT-714",
+dari: "CGK (Jakarta)",
+ke: "PNK (Pontianak)",
+jam: "14:40 - 16:10",
+status: "Menunggu Pembayaran",
+
+penumpang: [
+"Tn. Iman Kalvhin Fauzadin",
+"Tn. Kurniawan"
+],
+
+tanggal: "15 April 2026",
+kelas: "Ekonomi",
+bagasi: "20 kg",
+total: "Rp 2.059.088"
 }
 
 };
@@ -232,19 +250,9 @@ html += `<div style="margin-top:10px;"><div class="label">Total</div><div class=
 
 html += `<br><div><div class="label">Status</div><span class="badge ${warna}">${d.status}</span></div>`;
 
-// TIMER hanya untuk menunggu
+// ⏱️ TIMER SAJA (TANPA REKENING)
 if(d.status.includes("Menunggu")){
-html += `
-<div class="timer" id="timer">30:00</div>
-<div style="margin-top:10px;">
-<div class="label">Pembayaran</div>
-<div class="value">
-BANK BRI<br>
-A/N: SUCI RAHMADINI<br>
-3700-0101-4122-504<br>
-Kode Bank: 002
-</div>
-</div>`;
+html += `<div class="timer" id="timer">30:00</div>`;
 setTimeout(startTimer,100);
 }
 
