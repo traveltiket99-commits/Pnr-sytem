@@ -7,284 +7,287 @@
 
 <style>
 body {
-    margin: 0;
-    font-family: 'Segoe UI', sans-serif;
-    background:
-    linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)),
-    url('https://cdn.pixabay.com/photo/2016/11/29/09/32/aircraft-1867121_1280.jpg');
-    background-size: cover;
+    margin:0;
+    font-family:Arial;
+    background:#000;
+    color:#fff;
 }
 
-.header {
-    text-align: center;
-    color: white;
-    font-size: 24px;
-    padding: 20px;
+.box {
+    margin:20px;
+    padding:20px;
+    border-radius:25px;
+    background:#111;
+    box-shadow:0 0 30px rgba(255,0,0,0.2);
 }
 
-.container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 90vh;
+.title {
+    text-align:center;
+    font-size:22px;
+    margin-bottom:10px;
 }
 
-.card {
-    width: 380px;
-    padding: 25px;
-    border-radius: 20px;
-    background: rgba(255,255,255,0.12);
-    backdrop-filter: blur(15px);
-    color: white;
-    max-height: 90vh;
-    overflow-y: auto;
+.desc {
+    text-align:center;
+    color:#aaa;
+    font-size:14px;
+    margin-bottom:20px;
 }
 
-input, button {
-    width: 100%;
-    padding: 12px;
-    border-radius: 10px;
-    border: none;
-    margin-top: 10px;
+input {
+    width:100%;
+    padding:15px;
+    border-radius:12px;
+    border:none;
+    background:#222;
+    color:#fff;
+    margin-bottom:15px;
 }
 
 button {
-    background: #e60000;
-    color: white;
-    font-weight: bold;
+    width:100%;
+    padding:15px;
+    border:none;
+    border-radius:12px;
+    background:red;
+    color:white;
+    font-weight:bold;
+    font-size:16px;
 }
 
 .result {
-    margin-top: 20px;
-    padding: 15px;
-    border-radius: 12px;
-    background: rgba(255,255,255,0.2);
+    margin-top:20px;
+    display:none;
+    background:#1a1a1a;
+    border-radius:20px;
+    padding:20px;
 }
 
-.grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
+.row {
+    display:flex;
+    justify-content:space-between;
+    margin-bottom:10px;
 }
 
-.label { font-size: 12px; color: #ddd; }
-.value { font-weight: bold; }
-
-.badge {
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: bold;
+.label {
+    font-size:12px;
+    color:#aaa;
 }
 
-.green { background: #00ff88; color: black; }
-.orange { background: orange; color: black; }
+.value {
+    font-weight:bold;
+}
+
+.route {
+    text-align:center;
+    margin:15px 0;
+    font-size:18px;
+}
+
+.status {
+    margin-top:15px;
+    background:#FFD600;
+    color:#000;
+    text-align:center;
+    padding:12px;
+    border-radius:20px;
+    font-weight:bold;
+}
 
 .timer {
-    background: orange;
-    color: black;
-    text-align: center;
-    font-size: 22px;
-    padding: 10px;
-    border-radius: 10px;
-    margin-top: 10px;
+    margin-top:10px;
+    text-align:center;
+    color:#ff3b30;
+    font-size:14px;
 }
 
-.red { background: red; color: white; }
+.info {
+    text-align:center;
+    font-size:13px;
+    color:#aaa;
+}
 
-.loading { text-align: center; margin-top: 15px; }
+.qr {
+    text-align:center;
+    margin-top:15px;
+}
 </style>
 </head>
 
 <body>
 
-<div class="header">✈️ Flight PNR Checker</div>
+<div class="box">
 
-<div class="container">
-<div class="card">
+<div class="title">✈️ Flight PNR Checker</div>
 
-<input id="pnr" placeholder="Masukkan kode PNR">
-<button onclick="cek()">Cek Status</button>
+<p class="desc">
+Cek status penerbangan Anda dengan mudah menggunakan kode PNR. 
+Data yang ditampilkan merupakan data resmi dari sistem penerbangan.
+</p>
 
-<div id="hasil"></div>
+<input type="text" id="pnr" placeholder="Masukkan kode PNR">
+<button onclick="cekPNR()">Cek Status</button>
 
-</div>
+<div class="result" id="result"></div>
+
 </div>
 
 <script>
 
-const data = {
+// DATABASE
+const db = {
 
-"ABC123": {
-nama: "Budi Santoso",
-maskapai: "Lion Air",
-flight: "JT-610",
-dari: "CGK (Jakarta)",
-ke: "DPS (Bali)",
-jam: "08:30",
-status: "Confirmed"
+"AKTG2N": {
+    nama:"Pdt. Selvie Elizabeth Rumagit S.Th",
+    maskapai:"TransNusa",
+    flight:"8B5889 / 8B5888",
+    dari:"Manado (MDC)",
+    ke:"Denpasar (DPS)",
+    jam:"04:45 - 01:30",
+    boarding:"04:00",
+    gate:"-",
+    seat:"-",
+    total:"Rp 2.472.900",
+
+    status:"Menunggu Pembayaran",
+    deadlineHour:9
 },
 
-"XYZ789": {
-nama: "Andi Saputra",
-maskapai: "Garuda Indonesia",
-flight: "GA-200",
-dari: "CGK (Jakarta)",
-ke: "SUB (Surabaya)",
-jam: "13:45",
-status: "Confirmed"
-},
-
-"BTK147M": {
-nama: "Ny. Isna",
-maskapai: "Batik Air",
-flight: "ID-6763",
-dari: "MDC (Manado)",
-ke: "CGK (Jakarta)",
-jam: "16:45 - 21:45",
-status: "Menunggu Pembayaran",
-kelas: "Ekonomi",
-bagasi: "20 kg",
-tanggal: "14 April 2026",
-total: "Rp 2.317.800"
-},
-
-"LN1732S": {
-nama: "Tn. Sulisyono",
-maskapai: "Lion Air",
-flight: "JT-898 / JT-944",
-dari: "CGK (Jakarta)",
-ke: "SOQ (Sorong)",
-jam: "01:10 - 14:45",
-status: "Menunggu Pembayaran",
-penumpang: ["Tn. Sulisyono"],
-tanggal: "14 April 2026",
-kelas: "Ekonomi",
-bagasi: "20 kg",
-total: "Rp 1.732.800"
-},
-
-"JHMAUZ": {
-nama: "Ny. Muliani",
-maskapai: "Batik Air",
-flight: "ID-6316",
-dari: "PNK (Pontianak)",
-ke: "UPG (Makassar)",
-jam: "14:55 - 19:20",
-status: "Confirmed",
-penumpang: ["Ny. Muliani"],
-tanggal: "18 April 2026",
-kelas: "Ekonomi",
-bagasi: "20 kg",
-total: "Rp 1.739.900"
-},
-
-// ✅ DATA BARU TANPA REKENING
 "FPVMCW": {
-nama: "Tn. Iman Kalvhin Fauzadin & Tn. Kurniawan",
-maskapai: "Lion Air",
-flight: "JT-714",
-dari: "CGK (Jakarta)",
-ke: "PNK (Pontianak)",
-jam: "14:40 - 16:10",
-status: "Menunggu Pembayaran",
+    nama:"Nn. Siti Zahra Al Fauziyani",
+    maskapai:"Batik Air",
+    flight:"ID-7797",
+    dari:"Jakarta (CGK)",
+    ke:"Sorong (SOQ)",
+    jam:"00:30 - 06:35",
+    boarding:"00:00",
+    gate:"-",
+    seat:"A17",
+    total:"Rp 3.029.544",
 
-penumpang: [
-"Tn. Iman Kalvhin Fauzadin",
-"Tn. Kurniawan"
-],
-
-tanggal: "15 April 2026",
-kelas: "Ekonomi",
-bagasi: "20 kg",
-total: "Rp 2.059.088"
+    status:"Confirmed",
+    deadlineHour:0
 }
 
 };
 
-let timerInterval;
 
-function cek(){
+// FUNCTION
+function cekPNR(){
+    let input = document.getElementById("pnr").value.toUpperCase();
+    let result = document.getElementById("result");
 
-clearInterval(timerInterval);
+    if(db[input]){
+        let d = db[input];
 
-let pnr = document.getElementById("pnr").value.toUpperCase().trim();
-let h = document.getElementById("hasil");
+        result.innerHTML = `
+        <div class="row">
+            <div>
+                <div class="label">Nama</div>
+                <div class="value">${d.nama}</div>
+            </div>
+            <div>
+                <div class="label">Maskapai</div>
+                <div class="value">${d.maskapai}</div>
+            </div>
+        </div>
 
-h.innerHTML = `<div class="loading">⏳ Mengecek data...</div>`;
+        <div class="route">
+            ${d.dari} ✈ ${d.ke}
+        </div>
 
-setTimeout(() => {
+        <div class="row">
+            <div>
+                <div class="label">Flight</div>
+                <div class="value">${d.flight}</div>
+            </div>
+            <div>
+                <div class="label">Jam</div>
+                <div class="value">${d.jam}</div>
+            </div>
+        </div>
 
-if(data[pnr]){
+        <div class="row">
+            <div>
+                <div class="label">Gate</div>
+                <div class="value">${d.gate}</div>
+            </div>
+            <div>
+                <div class="label">Seat</div>
+                <div class="value">${d.seat}</div>
+            </div>
+        </div>
 
-let d = data[pnr];
-let warna = d.status.includes("Menunggu") ? "orange" : "green";
+        <div class="row">
+            <div>
+                <div class="label">Boarding</div>
+                <div class="value">${d.boarding}</div>
+            </div>
+            <div>
+                <div class="label">Total</div>
+                <div class="value">${d.total}</div>
+            </div>
+        </div>
 
-let html = `
-<div class="result">
-<div class="grid">
-<div><div class="label">Nama</div><div class="value">${d.nama}</div></div>
-<div><div class="label">Maskapai</div><div class="value">${d.maskapai}</div></div>
-<div><div class="label">Flight</div><div class="value">${d.flight}</div></div>
-<div><div class="label">Jam</div><div class="value">${d.jam}</div></div>
-<div><div class="label">Dari</div><div class="value">${d.dari}</div></div>
-<div><div class="label">Ke</div><div class="value">${d.ke}</div></div>
-</div>
-`;
+        <div class="status">${d.status === "Confirmed" ? "✔" : "⏳"} ${d.status}</div>
 
-if(d.penumpang){
-html += `<div style="margin-top:10px;"><div class="label">Penumpang</div><div class="value">${d.penumpang.join("<br>")}</div></div>`;
+        <div class="timer" id="timer"></div>
+
+        <div class="info">
+        ${d.status === "Menunggu Pembayaran" ? "Segera lakukan pembayaran sebelum pukul 09:00 WITA" : ""}
+        </div>
+
+        <div class="qr">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${input}">
+        </div>
+        `;
+
+        result.style.display="block";
+
+        if(d.status === "Menunggu Pembayaran"){
+            startDeadlineTimer(d.deadlineHour);
+        }
+
+    } else {
+        alert("PNR tidak ditemukan");
+    }
 }
 
-if(d.kelas){
-html += `<div style="margin-top:10px;"><div class="label">Kelas</div><div class="value">${d.kelas}</div></div>`;
+
+// TIMER
+function startDeadlineTimer(deadlineHour){
+    const display = document.getElementById("timer");
+
+    const interval = setInterval(() => {
+        let now = new Date();
+        let wita = new Date(now.getTime() + (8 * 60 * 60 * 1000));
+
+        let target = new Date(wita);
+        target.setHours(deadlineHour,0,0,0);
+
+        let diff = Math.floor((target - wita)/1000);
+
+        if(diff <= 0){
+            clearInterval(interval);
+            display.innerHTML = "❌ Waktu pembayaran habis";
+            return;
+        }
+
+        let m = Math.floor(diff/60);
+        let s = diff % 60;
+
+        display.innerHTML = `⏳ Sisa waktu: ${m}:${s<10?"0"+s:s}`;
+    },1000);
 }
 
-if(d.bagasi){
-html += `<div style="margin-top:10px;"><div class="label">Bagasi</div><div class="value">${d.bagasi}</div></div>`;
-}
 
-if(d.total){
-html += `<div style="margin-top:10px;"><div class="label">Total</div><div class="value">${d.total}</div></div>`;
-}
+// AUTO SCAN
+const urlParams = new URLSearchParams(window.location.search);
+const pnr = urlParams.get('pnr');
 
-html += `<br><div><div class="label">Status</div><span class="badge ${warna}">${d.status}</span></div>`;
-
-// ⏱️ TIMER SAJA (TANPA REKENING)
-if(d.status.includes("Menunggu")){
-html += `<div class="timer" id="timer">30:00</div>`;
-setTimeout(startTimer,100);
-}
-
-html += `</div>`;
-h.innerHTML = html;
-
-}else{
-h.innerHTML = `<div class="result" style="color:red;">PNR tidak ditemukan</div>`;
-}
-
-}, 800);
-}
-
-function startTimer(){
-let time = 1800;
-timerInterval = setInterval(()=>{
-let el = document.getElementById("timer");
-if(!el) return;
-
-let m = Math.floor(time/60);
-let s = time%60;
-
-el.innerHTML = String(m).padStart(2,'0')+":"+String(s).padStart(2,'0');
-
-if(time<=0){
-el.innerHTML="WAKTU HABIS";
-el.classList.add("red");
-clearInterval(timerInterval);
-}
-
-time--;
-},1000);
+if (pnr) {
+    document.getElementById("pnr").value = pnr;
+    setTimeout(() => cekPNR(), 500);
 }
 
 </script>
