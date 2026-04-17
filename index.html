@@ -133,7 +133,6 @@ Cek status penerbangan Anda dengan mudah menggunakan kode PNR
 
 // DATABASE
 const db = {
-
 "Q7X9PL": {
     nama:"Tn. Robinson Analalo",
     maskapai:"Batik Air",
@@ -148,10 +147,8 @@ const db = {
     etiket:"6723458912345",
     class:"Economy",
     bagasi:"20 Kg",
-
     status:"Pending Payment"
 }
-
 };
 
 
@@ -236,7 +233,6 @@ function cekPNR(){
         </div>
 
         <div class="status" id="statusBox"></div>
-
         <div class="timer" id="timer"></div>
 
         <div class="info">
@@ -251,14 +247,14 @@ function cekPNR(){
         result.style.display="block";
 
         setStatus(d.status);
-        start30MinuteTimer();
+        start30MinuteTimer(input);
     } else {
         alert("PNR tidak ditemukan");
     }
 }
 
 
-// STATUS STYLE
+// STATUS
 function setStatus(status){
     let box = document.getElementById("statusBox");
 
@@ -266,6 +262,10 @@ function setStatus(status){
         box.style.background = "#00c853";
         box.style.color = "#fff";
         box.innerHTML = "✔ Confirmed";
+    } else if(status === "Expired"){
+        box.style.background = "#ff3b30";
+        box.style.color = "#fff";
+        box.innerHTML = "❌ Expired";
     } else {
         box.style.background = "#FFD600";
         box.style.color = "#000";
@@ -274,31 +274,51 @@ function setStatus(status){
 }
 
 
-// TIMER 30 MENIT
-function start30MinuteTimer(){
-    const display = document.getElementById("timer");
+// TIMER REAL 30 MENIT (ANTI RESET)
+function start30MinuteTimer(pnr){
 
-    let duration = 30 * 60; // 30 menit
+    const display = document.getElementById("timer");
+    const statusBox = document.getElementById("statusBox");
+
+    let now = new Date().getTime();
+    let saved = localStorage.getItem("deadline_"+pnr);
+
+    let deadline;
+
+    if(saved){
+        deadline = parseInt(saved);
+    } else {
+        deadline = now + (30 * 60 * 1000);
+        localStorage.setItem("deadline_"+pnr, deadline);
+    }
 
     const interval = setInterval(() => {
 
-        let m = Math.floor(duration / 60);
-        let s = duration % 60;
+        let nowTime = new Date().getTime();
+        let distance = deadline - nowTime;
 
-        display.innerHTML = `⏳ Sisa waktu: ${m}:${s < 10 ? "0"+s : s}`;
-
-        duration--;
-
-        if(duration < 0){
+        if(distance <= 0){
             clearInterval(interval);
             display.innerHTML = "❌ Waktu pembayaran habis";
+
+            // update status jadi expired
+            statusBox.style.background = "#ff3b30";
+            statusBox.style.color = "#fff";
+            statusBox.innerHTML = "❌ Expired";
+
+            return;
         }
+
+        let m = Math.floor((distance % (1000*60*60)) / (1000*60));
+        let s = Math.floor((distance % (1000*60)) / 1000);
+
+        display.innerHTML = `⏳ Sisa waktu: ${m}:${s < 10 ? "0"+s : s}`;
 
     },1000);
 }
 
 
-// AUTO SCAN LINK ?pnr=
+// AUTO LINK ?pnr=
 const urlParams = new URLSearchParams(window.location.search);
 const pnr = urlParams.get('pnr');
 
