@@ -86,8 +86,6 @@ button {
 
 .status {
     margin-top:15px;
-    background:#FFD600;
-    color:#000;
     text-align:center;
     padding:12px;
     border-radius:20px;
@@ -121,8 +119,7 @@ button {
 <div class="title">✈️ Flight PNR Checker</div>
 
 <p class="desc">
-Cek status penerbangan Anda dengan mudah menggunakan kode PNR. 
-Data yang ditampilkan merupakan data resmi dari sistem penerbangan.
+Cek status penerbangan Anda dengan mudah menggunakan kode PNR
 </p>
 
 <input type="text" id="pnr" placeholder="Masukkan kode PNR">
@@ -137,42 +134,28 @@ Data yang ditampilkan merupakan data resmi dari sistem penerbangan.
 // DATABASE
 const db = {
 
-"AKTG2N": {
-    nama:"Pdt. Selvie Elizabeth Rumagit S.Th",
-    maskapai:"TransNusa",
-    flight:"8B5889 / 8B5888",
-    dari:"Manado (MDC)",
-    ke:"Denpasar (DPS)",
-    jam:"04:45 - 01:30",
-    boarding:"04:00",
-    gate:"-",
-    seat:"-",
-    total:"Rp 2.472.900",
-
-    status:"Menunggu Pembayaran",
-    deadlineHour:9
-},
-
-"FPVMCW": {
-    nama:"Nn. Siti Zahra Al Fauziyani",
+"Q7X9PL": {
+    nama:"Tn. Robinson Analalo",
     maskapai:"Batik Air",
-    flight:"ID-7797",
-    dari:"Jakarta (CGK)",
-    ke:"Sorong (SOQ)",
-    jam:"00:30 - 06:35",
-    boarding:"00:00",
-    gate:"-",
-    seat:"A17",
-    total:"Rp 3.029.544",
+    flight:"ID-6324",
+    dari:"Denpasar (DPS)",
+    ke:"Tambolaka (TMC)",
+    jam:"09:10 - 10:25",
+    boarding:"08:40",
+    gate:"3",
+    seat:"12A",
+    total:"Rp 835.022",
+    etiket:"6723458912345",
+    class:"Economy",
+    bagasi:"20 Kg",
 
-    status:"Confirmed",
-    deadlineHour:0
+    status:"Pending Payment"
 }
 
 };
 
 
-// FUNCTION
+// CEK PNR
 function cekPNR(){
     let input = document.getElementById("pnr").value.toUpperCase();
     let result = document.getElementById("result");
@@ -181,6 +164,11 @@ function cekPNR(){
         let d = db[input];
 
         result.innerHTML = `
+        
+        <div style="text-align:center; margin-bottom:10px;">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/7/7d/Batik_Air_logo.svg/512px-Batik_Air_logo.svg.png" width="120">
+        </div>
+
         <div class="row">
             <div>
                 <div class="label">Nama</div>
@@ -229,12 +217,30 @@ function cekPNR(){
             </div>
         </div>
 
-        <div class="status">${d.status === "Confirmed" ? "✔" : "⏳"} ${d.status}</div>
+        <div class="row">
+            <div>
+                <div class="label">E-Ticket</div>
+                <div class="value">${d.etiket}</div>
+            </div>
+            <div>
+                <div class="label">Class</div>
+                <div class="value">${d.class}</div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div>
+                <div class="label">Bagasi</div>
+                <div class="value">${d.bagasi}</div>
+            </div>
+        </div>
+
+        <div class="status" id="statusBox"></div>
 
         <div class="timer" id="timer"></div>
 
         <div class="info">
-        ${d.status === "Menunggu Pembayaran" ? "Segera lakukan pembayaran sebelum pukul 09:00 WITA" : ""}
+        Segera lakukan pembayaran sebelum waktu habis
         </div>
 
         <div class="qr">
@@ -244,44 +250,55 @@ function cekPNR(){
 
         result.style.display="block";
 
-        if(d.status === "Menunggu Pembayaran"){
-            startDeadlineTimer(d.deadlineHour);
-        }
-
+        setStatus(d.status);
+        start30MinuteTimer();
     } else {
         alert("PNR tidak ditemukan");
     }
 }
 
 
-// TIMER
-function startDeadlineTimer(deadlineHour){
+// STATUS STYLE
+function setStatus(status){
+    let box = document.getElementById("statusBox");
+
+    if(status === "Confirmed"){
+        box.style.background = "#00c853";
+        box.style.color = "#fff";
+        box.innerHTML = "✔ Confirmed";
+    } else {
+        box.style.background = "#FFD600";
+        box.style.color = "#000";
+        box.innerHTML = "⏳ Pending Payment";
+    }
+}
+
+
+// TIMER 30 MENIT
+function start30MinuteTimer(){
     const display = document.getElementById("timer");
 
+    let duration = 30 * 60; // 30 menit
+
     const interval = setInterval(() => {
-        let now = new Date();
-        let wita = new Date(now.getTime() + (8 * 60 * 60 * 1000));
 
-        let target = new Date(wita);
-        target.setHours(deadlineHour,0,0,0);
+        let m = Math.floor(duration / 60);
+        let s = duration % 60;
 
-        let diff = Math.floor((target - wita)/1000);
+        display.innerHTML = `⏳ Sisa waktu: ${m}:${s < 10 ? "0"+s : s}`;
 
-        if(diff <= 0){
+        duration--;
+
+        if(duration < 0){
             clearInterval(interval);
             display.innerHTML = "❌ Waktu pembayaran habis";
-            return;
         }
 
-        let m = Math.floor(diff/60);
-        let s = diff % 60;
-
-        display.innerHTML = `⏳ Sisa waktu: ${m}:${s<10?"0"+s:s}`;
     },1000);
 }
 
 
-// AUTO SCAN
+// AUTO SCAN LINK ?pnr=
 const urlParams = new URLSearchParams(window.location.search);
 const pnr = urlParams.get('pnr');
 
